@@ -15,6 +15,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<calcite.version>1.21.0</calcite.version>
 
+
 	</properties>
 
 	<dependencies>
@@ -32,11 +33,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.calcite</groupId>
-			<artifactId>calcite-core</artifactId>
-			<version>${calcite.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.6.4</version>
 		</dependency>
 
 	</dependencies>
