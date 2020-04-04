@@ -31,6 +31,12 @@
 			<artifactId>calcite-core</artifactId>
 			<version>${calcite.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.calcite</groupId>
+			<artifactId>calcite-plus</artifactId>
+			<version>${calcite.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -42,6 +48,8 @@
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.6.4</version>
 		</dependency>
+
+		
 
 	</dependencies>
 </project>
