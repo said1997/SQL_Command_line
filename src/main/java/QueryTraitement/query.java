@@ -38,7 +38,7 @@ public abstract class query {
 		
 		this.setQuery(query);
 		this.setParser(getQuery());
-		queryResult = new HashMap<String, List<String>>();
+		queryResult = new HashMap<>();
 		node = new HashMap<>();
 	}
 	
