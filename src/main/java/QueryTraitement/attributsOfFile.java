@@ -1,5 +1,6 @@
 package QueryTraitement;
 
+
 public enum attributsOfFile {
 	/**
 	 * Les attributs de la table fichier
