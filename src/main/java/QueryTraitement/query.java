@@ -13,12 +13,12 @@ public abstract class query {
 	/**
 	 * La requette à parser.
 	 */
-	private String queryToParse;
+	protected String queryToParse;
 	
 	/**
 	 * Le parser Sql qui sera utilisé pour parser la requette.
 	 */
-	private SqlParser  parser;
+	protected SqlParser  parser;
 	
 	/**
 	 * Le résultat qui sera traité par OsTraitement après avoir parsé la requette.

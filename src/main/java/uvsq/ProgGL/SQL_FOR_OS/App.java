@@ -21,6 +21,8 @@ import org.apache.calcite.tools.Frameworks;
 import org.apache.calcite.tools.Planner;
 import org.apache.calcite.util.Util;
 
+import QueryTraitement.querySelect;
+
 
 public class App {
 	
@@ -28,7 +30,7 @@ public class App {
  
 
 	public static void main(String[] args) {
-		String query = "select a,b,c from d where d.id in (select id from (select id from e))";
+		/*String query = "select a,b,c from d where d.id in (select id from (select id from e))";
 
 		try {
 			SqlParser parser = SqlParser.create(query);
@@ -40,7 +42,9 @@ public class App {
 		} catch (SqlParseException e) {
 
 			e.printStackTrace();
-		}
+		}*/
+		querySelect qs = new querySelect("Select a from A where a = b or a = 2");
+		qs.ExtractClausesWhere();
 		
 		
 

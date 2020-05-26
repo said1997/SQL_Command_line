@@ -1,7 +1,10 @@
 package QueryTraitement;
 
 
+import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlSelect;
+import org.apache.calcite.sql.parser.SqlParseException;
+import org.apache.calcite.sql.parser.SqlParser;
 
 public class querySelect extends query {
 	
@@ -31,15 +34,23 @@ public class querySelect extends query {
 	 * Exctraire le attributs de la clause Where et les mettre dans queryResult
 	 * Types d'attributs de la clause where (type,name,size,contenent,extention, )
 	 */
-	private void ExtractClausesWhere() {
-
+	public void ExtractClausesWhere() {
+		
+		 this.parser = SqlParser.create(this.queryToParse);
+		 try {
+			SqlSelect sel = (SqlSelect) this.parser.parseQuery();
+			SqlNode sqlnode = sel.getWhere();
+			this.node.put("WHERE", sqlnode);
+		} catch (SqlParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 *  Exctraire les sattributs de and de la clause Where et les mettre dans queryResult
 	 */
-	private void ExtractAndFromWhere() {
-
+	public void ExtractAndFromWhere() {
 	}
 
 	/**
