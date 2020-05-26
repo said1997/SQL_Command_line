@@ -1,10 +1,17 @@
 package OsTraitement;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FindCommand extends OsTraitement {
+import QueryTraitement.attributsOfFile;
 
+public class FindCommand extends OsTraitement {
+	
+	//lien documentation ls http://manpagesfr.free.fr/man/man1/ls.1.html
+	//du -sh --apparent-size ./Bureau/ afiicher la taille réelle
+	//ls -alld */ afficher tout les dossier 
+	//ls -allF | grep -v '/$' afficher tout les fichiers
 
 	/**
 	 * Constructeur de cette classe
@@ -18,40 +25,56 @@ public class FindCommand extends OsTraitement {
 	 * Traduction de requette de type Select en OS.
 	 */
 	private void ExtractFind() {
-		
+
 
 	}
-	
+
 	/**
 	 * Traduction de la clause select en commande OS
 	 */
-	private void addSelectTraduction() {
+	public void addSelectTraduction() {
 
-		if (queryToOs.containsKey("Select")) {
+		Map<String, Boolean> flagAttribut = new HashMap<String, Boolean>();
+		
+		initFlagsAttributs(flagAttribut);
 
-			Command=addToCommand("find");
-			List<String> list = queryToOs.get("Select");
+		if (queryToOs.containsKey("SELECT")) {
 
+			addToCommand("ls");
+			List<String> list = queryToOs.get("SELECT");
 			for(String l : list) {
-				if(l.equals("name")) {
-					this.Command = addToCommand(" -name");
-				}
 				if(l.equals("*")) {
-					this.Command = addToCommand("ls --all");
+					
 				}
+				if(l.equals("NAME")) {
+				
+				}
+
 
 			}
 		}
 	}
-    /**
-     * 
-     * @param toAdd le paramètre os correspendant.
-     * @return la commande.
-     */
-	private String addToCommand(String toAdd) {
-		this.Command = this.Command + toAdd;
-		return Command;
-	}
+	/**
+	 * Ajouter un attribut a la ligne de commande
+	 * @param toAdd le paramètre os correspendant à ajouter dans Command.
+	 */
+	private void addToCommand(String toAdd) {
+		setCommand(getCommand() + toAdd);
 
+	}
+	
+	/**
+	 * Initialisation des attributs de Select
+	 */
+	private Map<String, Boolean> initFlagsAttributs(Map<String, Boolean> initFlags){
+			
+		initFlags.put("NAME", false);
+		initFlags.put("TYPE", false);
+		initFlags.put("SIZE", false);
+		initFlags.put("EXTENTION", false);
+	
+		return initFlags;
+	}
+	
 
 }

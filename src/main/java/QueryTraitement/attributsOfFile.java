@@ -12,9 +12,14 @@ public enum attributsOfFile {
 	DATELACCES("DATELASTACCESS"),
 	DATELMODIFICATION("DATELASTMODIFICATION");
 	
+	private String attribut;
 	
-	private attributsOfFile(String attribut) {
-		
+	private attributsOfFile(String A) {
+		this.attribut=A;
+	}
+	
+	public String getAttribut() {
+		return this.attribut;
 	}
 	
 }
