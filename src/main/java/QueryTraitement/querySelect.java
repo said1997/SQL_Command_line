@@ -51,6 +51,18 @@ public class querySelect extends query {
 	 *  Exctraire les sattributs de and de la clause Where et les mettre dans queryResult
 	 */
 	public void ExtractAndFromWhere() {
+		String FindAnd = null;
+		 this.parser = SqlParser.create(this.queryToParse);
+		 try {
+			SqlSelect sel = (SqlSelect) this.parser.parseQuery();
+			FindAnd = sel.getWhere().toString().toUpperCase();
+			if(FindAnd.contains("AND")) {
+				System.out.println("contains AND ");
+			}
+		} catch (SqlParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**

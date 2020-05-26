@@ -43,10 +43,8 @@ public class App {
 
 			e.printStackTrace();
 		}*/
-		querySelect qs = new querySelect("Select a from A where a = b or a = 2");
-		qs.ExtractClausesWhere();
-		
-		
+		querySelect qs = new querySelect("Select a from A where a = b and a = 2");
+		qs.ExtractAndFromWhere();
 
 	}
 }
