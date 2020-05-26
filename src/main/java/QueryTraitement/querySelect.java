@@ -68,8 +68,19 @@ public class querySelect extends query {
 	/**
 	 *  Exctraire les sattributs de OR de la clause Where et les mettre dans queryResult
 	 */
-	private void ExtractOrFromWhere() {
-
+	public void ExtractOrFromWhere() {
+		String FindOr = null;
+		 this.parser = SqlParser.create(this.queryToParse);
+		 try {
+			SqlSelect sel = (SqlSelect) this.parser.parseQuery();
+			FindOr = sel.getWhere().toString().toUpperCase();
+			if(FindOr.contains("Or")) {
+				System.out.println("contains Or ");
+			}
+		} catch (SqlParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
