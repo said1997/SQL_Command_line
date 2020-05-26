@@ -17,7 +17,7 @@ import org.apache.calcite.sql.parser.SqlParser;
 
 public class ParseQuery {
 	private static List<String> extrairesClausesFrom(SqlNode node) {
-		final List<String> tables = new ArrayList<>();
+		final List<String> tables = new ArrayList<String>();
 
 		// Si on a un orderBy dans la requete.
 		if (node.getKind().equals(SqlKind.ORDER_BY)) {
@@ -68,7 +68,7 @@ public class ParseQuery {
 	}
 
 	private static Map<String, String> extrairesClausesWhere(SqlNode node) {
-		final Map<String, String> Table = new HashMap<>();
+		final Map<String, String> Table = new HashMap<String,String>();
 
 		// si on a un order by dans la query
 		if (node.getKind().equals(SqlKind.ORDER_BY)) {

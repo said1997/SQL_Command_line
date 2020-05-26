@@ -1,7 +1,15 @@
 package QueryTraitement;
 
 
+import java.awt.List;
+import java.util.ArrayList;
+
+import org.apache.calcite.sql.SqlJoin;
+import org.apache.calcite.sql.SqlKind;
+import org.apache.calcite.sql.SqlNode;
+import org.apache.calcite.sql.SqlNodeList;
 import org.apache.calcite.sql.SqlSelect;
+import org.apache.calcite.sql.parser.SqlParser;
 
 public class querySelect extends query {
 	
@@ -16,16 +24,37 @@ public class querySelect extends query {
 		setSelectNode(getSelectNode());
 		
 	}
-	private void ExtractClausesSelect() {
+	/**
+	 * extraire les attributs de la clause Select et les mettre dans queryResult
+	 */
+	public void ExtractClausesSelect() {
+		ArrayList<String> SelectTable=new ArrayList<String>();
+		SqlNodeList ListNode = ((SqlSelect) this.parseQuery()).getSelectList();
+	    	for (int i=0;i<ListNode.size();i++)
+	    	{ 
+	    		SelectTable.add(ListNode.get(i).toString());
+	    	}
+	    queryResult.put("SELECT", SelectTable);
 
 	}
 
 	/**
 	 * Exctraire le attributs de la clause From et les mettre dans queryResult
 	 */
-	private void ExtractClausesFrom() {
-
-	}
+	public void ExtractClausesFrom() {
+		
+		SqlSelect selectNode =(SqlSelect) this.parseQuery();
+		java.util.List<String> tables=new ArrayList<String>();
+		
+		  if (selectNode.getFrom().getKind().equals(SqlKind.IDENTIFIER))
+	    	{
+	    		tables.add(0, selectNode.getFrom().toString());
+	    	}
+		  else {
+			  	SqlJoin join = (SqlJoin) selectNode.getFrom();
+			  	this.RecurisiveClausesFrom(join, selectNode, tables);}
+		queryResult.put("FROM", tables);
+		}
 
 	/**
 	 * Exctraire le attributs de la clause Where et les mettre dans queryResult
@@ -78,6 +107,20 @@ public class querySelect extends query {
 	 */
 	public SqlSelect getSelectNode () {
 		return this.SelectNode;
+	}
+	
+	private java.util.List<String> RecurisiveClausesFrom (SqlJoin join,SqlNode node,java.util.List<String> tables)
+	{
+		if (join.getLeft().getKind().equals(SqlKind.IDENTIFIER))
+		{
+			tables.add(join.getRight().toString());
+			tables.add(join.getLeft().toString());
+			return tables;
+		}
+		else 
+		tables.add(join.getRight().toString());
+		return RecurisiveClausesFrom((SqlJoin) join.getLeft(),node,tables);
+
 	}
 
 }
