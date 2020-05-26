@@ -19,7 +19,7 @@ public class querySelectTest{
 		queryselect.ExtractClausesSelect();
 		Map<String, List<String>> result=queryselect.getQueryResult();
 		List<String> list=result.get("SELECT");
-		assertTrue(list.get(0).equals("NAME"));
+		assertTrue(list.get(0).equals(attributsOfFile.NOM.get()));
 		
 	}
 	@Test

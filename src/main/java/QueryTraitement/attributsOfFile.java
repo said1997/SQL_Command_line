@@ -5,12 +5,13 @@ public enum attributsOfFile {
 	 * Les attributs de la table fichier
 	 */
 	TYPE("TYPE"),
-	NOM("NOM"),
+	NOM("NAME"),
 	SIZE("SIZE"),
 	EXTENTION("EXTENTION"),
 	DATE("DATE"),
 	DATELACCES("DATELASTACCESS"),
-	DATELMODIFICATION("DATELASTMODIFICATION");
+	DATELMODIFICATION("DATELASTMODIFICATION"),
+	ACCESRIGHTS("ACCESSRIGHTS");
 	
 	private String attribut;
 	
@@ -18,7 +19,7 @@ public enum attributsOfFile {
 		this.attribut=A;
 	}
 	
-	public String getAttribut() {
+	public String get() {
 		return this.attribut;
 	}
 	
