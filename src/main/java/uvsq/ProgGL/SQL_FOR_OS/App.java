@@ -45,7 +45,7 @@ public class App {
 		}*/
 		querySelect qs = new querySelect("Select a from A where a = b");
 		qs.ExtractClausesWhere();
-		System.out.println(qs.getQueryResult());
+		//System.out.println(qs.getQueryResult());
 
 	}
 }

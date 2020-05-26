@@ -7,8 +7,8 @@ import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.parser.SqlParseException;
 import org.apache.calcite.sql.parser.SqlParser;
-
-public class querySelect extends query {
+import QueryTraitement.query;
+public class querySelect extends query{
 	
 	private SqlSelect SelectNode;
 	
@@ -120,5 +120,4 @@ public class querySelect extends query {
 	public SqlSelect getSelectNode () {
 		return this.SelectNode;
 	}
-
 }
