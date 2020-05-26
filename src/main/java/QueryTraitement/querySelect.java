@@ -1,6 +1,8 @@
 package QueryTraitement;
 
 
+import java.util.ArrayList;
+
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.parser.SqlParseException;
@@ -35,52 +37,57 @@ public class querySelect extends query {
 	 * Types d'attributs de la clause where (type,name,size,contenent,extention, )
 	 */
 	public void ExtractClausesWhere() {
-		
+		String transition = null;
+		String [] str;
+		ArrayList<String> tmp = new ArrayList<String>() ;
 		 this.parser = SqlParser.create(this.queryToParse);
 		 try {
 			SqlSelect sel = (SqlSelect) this.parser.parseQuery();
 			SqlNode sqlnode = sel.getWhere();
-			this.node.put("WHERE", sqlnode);
-		} catch (SqlParseException e) {
-			// TODO Auto-generated catch block
+			String verifORAND = sqlnode.toString();
+			if(verifORAND.contains("OR")) {
+				ExtractOrFromWhere();
+			}
+			else if(verifORAND.contains("AND")){
+				ExtractAndFromWhere();
+			}
+			else {
+				transition = sqlnode.toString();
+				transition = transition.replace("(", "-");
+				transition = transition.replace(")", "-");
+				transition = transition.replace(",", "-");
+				transition = transition.replace("\n", "-");
+				transition = transition.replace("`", "-");
+				transition = transition.replace(" ", "-");
+				str =transition.split("");
+				for(int i=0; i<str.length; i++) {
+					while(str[i].equals("-") && (i<str.length -1)){
+						i++;
+					}
+					tmp.add(str[i]);
+				}
+				if(tmp.get(tmp.size()-1).equals("-")) {
+					tmp.remove(tmp.get(tmp.size()-1));
+				}
+				this.queryResult.put("WHERE", tmp);
+			}
+				} catch (SqlParseException e) {
 			e.printStackTrace();
-		}
+		 }
 	}
 
 	/**
 	 *  Exctraire les sattributs de and de la clause Where et les mettre dans queryResult
 	 */
 	public void ExtractAndFromWhere() {
-		String FindAnd = null;
-		 this.parser = SqlParser.create(this.queryToParse);
-		 try {
-			SqlSelect sel = (SqlSelect) this.parser.parseQuery();
-			FindAnd = sel.getWhere().toString().toUpperCase();
-			if(FindAnd.contains("AND")) {
-				System.out.println("contains AND ");
-			}
-		} catch (SqlParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println("renvoyez ici");
 	}
 
 	/**
 	 *  Exctraire les sattributs de OR de la clause Where et les mettre dans queryResult
 	 */
 	public void ExtractOrFromWhere() {
-		String FindOr = null;
-		 this.parser = SqlParser.create(this.queryToParse);
-		 try {
-			SqlSelect sel = (SqlSelect) this.parser.parseQuery();
-			FindOr = sel.getWhere().toString().toUpperCase();
-			if(FindOr.contains("Or")) {
-				System.out.println("contains Or ");
-			}
-		} catch (SqlParseException e) {
-			// TODO Auto-generated catch block 
-			e.printStackTrace();
-		}
+		System.out.println("renvoyez ici");
 	}
 
 	/**
