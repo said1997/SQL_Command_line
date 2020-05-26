@@ -38,8 +38,8 @@ public abstract class query {
 		
 		this.setQuery(query);
 		this.setParser(getQuery());
-		queryResult = new HashMap<>();
-		node = new HashMap<>();
+		queryResult = new HashMap<String,List<String>>();
+		node = new HashMap<String,SqlNode>();
 	}
 	
 	/**
@@ -58,13 +58,12 @@ public abstract class query {
 	}
 	
 	/**
-	 * Parse Query la requette à parser
-	 * @param query la requette à parser.
-	 * @return un parser sur la requette.
+	 * Parser la requette query.
+	 * @return un SqlNode le premier noeud de la requette.
 	 */
 	protected SqlNode parseQuery() {
 		try { 
-			return parser.parseQuery(getQuery());
+			return parser.parseQuery();
 		}
 		catch (Exception e) {
 			System.err.println("Erreur dans la syntaxe de la requette");
@@ -77,11 +76,11 @@ public abstract class query {
 	 * @return
 	 */
 	public SqlParser getParser() {
-		return parser;
+		return this.parser;
 	}
 
 	/**
-	 * Set le parser sur la requette à parser
+	 * crée un parseur pour la requette à parser
 	 * @param parser
 	 */
 	public void setParser(final String query) {
@@ -129,5 +128,31 @@ public abstract class query {
 		}
 		
 	}
+	
+	/**
+	 * Regarde si elle contient au moin une minuscule ou une majuscule.
+	 * @param str prends une chaine de caractère.
+	 * @return boolean true or false.
+	 */
+	protected boolean checkLowerOrOppCaseString(String str) {
+	    char ch;
+	    boolean capitalFlag = false;
+	    boolean lowerCaseFlag = false;
+
+	    if(str != null && !str.equals("")) {
+	    for(int i=0;i < str.length();i++) {
+	        ch = str.charAt(i);
+	       if (Character.isUpperCase(ch)) {
+	            capitalFlag = true;
+	        } else if (Character.isLowerCase(ch)) {
+	            lowerCaseFlag = true;
+	        }
+	        if(capitalFlag && lowerCaseFlag)
+	            return true;
+	    }
+	    }
+	    return false;
+	}
+
 	  	  
 }

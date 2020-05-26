@@ -4,13 +4,13 @@ public enum attributsOfFile {
 	/**
 	 * Les attributs de la table fichier
 	 */
-	TYPE("type"),
-	NOM("nom"),
-	SIZE("size"),
-	EXTENTION("extention"),
-	DATE("date"),
-	DATELACCES("dateLastAccess"),
-	DATELMODIFICATION("dateLastModification");
+	TYPE("TYPE"),
+	NOM("NOM"),
+	SIZE("SIZE"),
+	EXTENTION("EXTENTION"),
+	DATE("DATE"),
+	DATELACCES("DATELASTACCESS"),
+	DATELMODIFICATION("DATELASTMODIFICATION");
 	
 	
 	private attributsOfFile(String attribut) {
