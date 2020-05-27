@@ -152,7 +152,7 @@ public class FindCommand extends OsTraitement {
 		
 		for(String Ap : Elements) {
 			//if(Ap.endsWith("/")) {
-			ResultLs.add(Apath+Ap);
+			ResultLs.add(Apath+"/"+Ap);
 			//}
 			//else{
 			//	ResultLs.add(Apath);

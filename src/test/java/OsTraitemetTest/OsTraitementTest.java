@@ -55,6 +55,13 @@ public class OsTraitementTest {
 		
 		for(String s : result.get("FROM")) {
 			
+			for(String c : cmd.getFolderAndContainers(s)) {
+				
+				for(String d : OsTraitement.executeCommand(cmd.constructStatCommandFrom(tab,c))) {
+					System.out.println(d);
+				}
+				
+			}
 		}
 
 	}
