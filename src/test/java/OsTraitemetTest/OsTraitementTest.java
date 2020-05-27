@@ -40,13 +40,22 @@ public class OsTraitementTest {
 	
 	@Test
 	public void getinitStatCommand() {
-		querySelect queryselect=new querySelect("select name,type,size,ACCESSRIGHTS from src");
+		querySelect queryselect=new querySelect("select name,type,size,ACCESSRIGHTS from src,target,bin");
 		List<String> listStat = new ArrayList<String>();
 		queryselect.ExtractClausesSelect();
+		queryselect.ExtractClausesFrom();
+
 		Map<String, List<String>> result=queryselect.getQueryResult();
 		FindCommand cmd = new FindCommand(result);
+		String [] tab = cmd.addSelectTraduction();
 		listStat=OsTraitement.executeCommand(cmd.addSelectTraduction());
+		cmd.AddFromTraduction();
+		System.out.println(cmd.getFolderAndContainers("bin/pom.xml"));
 		System.out.println(listStat);
+		
+		for(String s : result.get("FROM")) {
+			
+		}
 
 	}
 }

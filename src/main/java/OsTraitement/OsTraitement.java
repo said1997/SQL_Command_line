@@ -10,38 +10,40 @@ import java.util.Map;
 import QueryTraitement.attributsOfFile;
 
 public abstract class OsTraitement {
-	
+
 	protected Map<String,List<String>> queryToOs;
 	protected String Command;
 	protected String statCommand;
-	
+	protected  Map<String,List<String>> FolderAndContiners;
+
 	/**
 	 * Constructeur de La classe
 	 */
 	public OsTraitement(Map<String,List<String>> toTraduct) {
-		this.queryToOs= new HashMap<String,List<String>>();	
+		this.queryToOs = new HashMap<String,List<String>>();	
+		this.FolderAndContiners = new HashMap<String,List<String>>();
 		this.Command= new String("");
 		this.queryToOs=toTraduct;
 		setStatCommand(new String(""));
-		}
-	
-	
+	}
+
+
 	/**
-     * Set l'attribut Commande de la classe OsTraitement.
-     * @param newCommand la nouvelle commande.
-     */
+	 * Set l'attribut Commande de la classe OsTraitement.
+	 * @param newCommand la nouvelle commande.
+	 */
 	public void setCommand(String newCommand) {
 		this.Command = newCommand;
 	}
-	
+
 	/**
-     * Set l'attribut Commande de la classe OsTraitement.
-     * @param newCommand la nouvelle commande.
-     */
+	 * Set l'attribut Commande de la classe OsTraitement.
+	 * @param newCommand la nouvelle commande.
+	 */
 	public String getCommand() {
 		return this.Command;
 	}
-	
+
 	/**
 	 * Prend une commende Shell en paramètre et l'éxecute
 	 * @param une commande Shell à éxecuter sous forme d'un string
@@ -67,7 +69,7 @@ public abstract class OsTraitement {
 
 		return getExecute;
 	}
-	
+
 	/**
 	 * Prend une commende Shell en paramètre et l'éxecute
 	 * @param une commande Shell à éxecuter sous forme d'un string
@@ -93,7 +95,7 @@ public abstract class OsTraitement {
 
 		return getExecute;
 	}
-	
+
 	/**
 	 * Retourne la commande Stat à utiliser
 	 * @return l'attribut statCommand de cette classe.
@@ -101,34 +103,49 @@ public abstract class OsTraitement {
 	public String getStatCommand() {
 		return this.statCommand;
 	}
-	
+
 	/**
 	 * Set l'attribut commandeStat
 	 */
 	public void setStatCommand(String newStatCommand) {
 		this.statCommand=newStatCommand;
 	}
-	
+
+	/**
+	 * 
+	 */
+
+
 	/**
 	 * Construction de la commende State
 	 */
-	public static String [] constructStatCommand(Map<String,Boolean> flagsAttributs) {
+	public static String [] constructStatCommandSelect(Map<String,Boolean> flagsAttributs) {
 		//stat --format "file name : %n, Type : %F, Size : %s, Access Rights : %A, Time Of last Access : %x, Time of last modif %y " target
 		String [] initStatCommand = new String [4];
 		initStatCommand[0]="stat";
 		initStatCommand[1]="--format";
 		initStatCommand[2]=convertSelectAttributes(flagsAttributs);
-		initStatCommand[3]="src";
-	return initStatCommand;
+		initStatCommand[3]="";
+		return initStatCommand;
 	}
 	
-	
+	/**
+	 * Construction de la commende State
+	 */
+	public static String [] constructStatCommandFrom(String [] AttributSelect, String path) {
+		//stat --format "file name : %n, Type : %F, Size : %s, Access Rights : %A, Time Of last Access : %x, Time of last modif %y " target
+		AttributSelect[3]=path;
+		
+		return AttributSelect;
+	}
+
+
 	/**
 	 * Convert attributs of clause Select to OS
 	 */
 	public static String convertSelectAttributes(Map<String,Boolean> flagsAttributs) {
 		String arguments = new String("");
-		
+
 		if(flagsAttributs.get(attributsOfFile.NOM.get()))
 			arguments = arguments + "file name : %n, " ;
 		if(flagsAttributs.get(attributsOfFile.TYPE.get()))
@@ -141,8 +158,32 @@ public abstract class OsTraitement {
 			arguments = arguments + "Time Of last Access : %x, " ;
 		if(flagsAttributs.get(attributsOfFile.DATELMODIFICATION.get()))
 			arguments = arguments + " Time of last modif %y " ;
-		
+
 		return arguments;
 	}
+
+	/**
+	 * Get folder and Containers
+	 */
+	public Map<String,List<String>> getFolderAndContainers(){
+		return this.FolderAndContiners;
+	}
 	
+	/**
+	 * Get contenets of a folder
+	 * @param name of folder
+	 */
+	public List<String> getFolderAndContainers(String folder){
+		if(getFolderAndContainers().containsKey(folder))
+			return getFolderAndContainers().get(folder);
+		else return null;
+	}
+
+	/**
+	 * Remplis un folder avec ses fichiers contenus
+	 */
+	public void addToFolderAndContainers(String path, List<String> contenents){
+		this.FolderAndContiners.put(path, contenents);
+	}
+
 }

@@ -22,7 +22,7 @@ public class querySelect extends query {
 
 	public querySelect(final String query) {
 		super(query);
-		setSelectNode(getSelectNode());
+		setSelectNode(this.parseQuery());
 
 	}
 	/**
@@ -30,7 +30,7 @@ public class querySelect extends query {
 	 */
 	public void ExtractClausesSelect() {
 		ArrayList<String> SelectTable=new ArrayList<String>();
-		SqlNodeList ListNode = ((SqlSelect) this.parseQuery()).getSelectList();
+		SqlNodeList ListNode = (getSelectNode()).getSelectList();
 		for (int i=0;i<ListNode.size();i++)
 		{ 
 			SelectTable.add(ListNode.get(i).toString());
@@ -44,7 +44,7 @@ public class querySelect extends query {
 	 */
 	public void ExtractClausesFrom() {
 
-		SqlSelect selectNode =(SqlSelect) this.parseQuery();
+		SqlSelect selectNode =(SqlSelect) getSelectNode();
 		List<String> FromTables=new ArrayList<String>();
 
 		if (selectNode.getFrom().getKind().equals(SqlKind.IDENTIFIER))
@@ -68,7 +68,7 @@ public class querySelect extends query {
 	 */
 	private void ExtractClausesWhere() {
 
-		 SqlSelect sel = (SqlSelect) this.parseQuery();
+		 SqlSelect sel = getSelectNode();
 		SqlNode sqlnode = sel.getWhere();
 		this.node.put("WHERE", sqlnode);
 	}
@@ -79,7 +79,7 @@ public class querySelect extends query {
 	private void ExtractAndFromWhere() {
 		
 		String FindAnd = null;
-		 SqlSelect sel = (SqlSelect) this.parseQuery();
+		 SqlSelect sel = getSelectNode();
 		FindAnd = sel.getWhere().toString().toUpperCase();
 		if(FindAnd.contains("AND")) {
 			System.out.println("contains AND ");
@@ -93,34 +93,20 @@ public class querySelect extends query {
 	private void ExtractOrFromWhere() {
 		
 		String FindOr = null;
-		 SqlSelect sel = (SqlSelect) this.parseQuery();
+		 SqlSelect sel = getSelectNode();
 		FindOr = sel.getWhere().toString().toUpperCase();
 		if(FindOr.contains("Or")) {
 			System.out.println("contains Or ");
 		}
 	}
 
-	/**
-	 * Retourner le premieu noeud de la l'arbre de la requette à parser.
-	 * @return SqlSelect Le premier noeud de la requette de type Select node
-	 */
-	protected SqlSelect getFirstNode() {
-		try {
-
-			return (SqlSelect)parseQuery();
-		}
-		catch(Exception e) {
-			System.err.println("Impossible de retourner le premier Noeud de la requette type Select");
-			return null;
-		}
-	}
 
 	/**
 	 * Metttre a jour le Noeud Select
 	 * @param newNode le nouveau noeud select
 	 */
-	public void setSelectNode (SqlSelect newNode) {
-		this.SelectNode = newNode;
+	public void setSelectNode (SqlNode newNode) {
+		this.SelectNode = (SqlSelect)newNode;
 	}
 
 	/**

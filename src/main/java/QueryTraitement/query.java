@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.calcite.sql.SqlNode;
+import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.parser.SqlParser;
 
 public abstract class query {
@@ -19,6 +20,7 @@ public abstract class query {
 	 * Le parser Sql qui sera utilisé pour parser la requette.
 	 */
 	private SqlParser  parser;
+	
 	
 	/**
 	 * Le résultat qui sera traité par OsTraitement après avoir parsé la requette.
@@ -63,7 +65,8 @@ public abstract class query {
 	 */
 	protected SqlNode parseQuery() {
 		try { 
-			return parser.parseQuery();
+			
+			return this.parser.parseQuery();
 		}
 		catch (Exception e) {
 			System.err.println("Erreur dans la syntaxe de la requette");
@@ -128,6 +131,7 @@ public abstract class query {
 		}
 		
 	}
+	
 	
 	/**
 	 * Regarde si elle contient au moin une minuscule ou une majuscule.
