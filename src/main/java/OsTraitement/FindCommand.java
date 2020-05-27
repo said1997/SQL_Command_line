@@ -1,5 +1,6 @@
 package OsTraitement;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,11 +23,22 @@ public class FindCommand extends OsTraitement {
 	}
 
 	/**
-	 * Traduction de requette de type Select en OS.
+	 * Traduction de la clause From language OS.
+	 * @return paths la liste des clauses from
 	 */
-	private void ExtractFind() {
-
-
+	public List<String> addFromTraduction() {
+		List<String> contenent = new ArrayList<String>();
+		List<String> paths = new ArrayList<String>();
+		
+		if (queryToOs.containsKey("FROM")) {
+			paths = queryToOs.get("FROM");
+			for(String p : paths) {
+				contenent=executeCommand(p);
+				
+			}
+		}
+		
+		return paths;
 	}
 
 	/**

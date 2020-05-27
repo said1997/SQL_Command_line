@@ -118,9 +118,10 @@ public abstract class OsTraitement {
 		initStatCommand[0]="stat";
 		initStatCommand[1]="--format";
 		initStatCommand[2]=convertSelectAttributes(flagsAttributs);
-		initStatCommand[3]="target";
+		initStatCommand[3]="src";
 	return initStatCommand;
 	}
+	
 	
 	/**
 	 * Convert attributs of clause Select to OS

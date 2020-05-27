@@ -25,7 +25,7 @@ public class querySelectTest{
 	@Test
 	public void TestFromWithMajusclusPath()
 	{
-		querySelect queryselect=new querySelect(" select * from \"Bureau\",\"documents\",\"c\",\"e\" ");
+		querySelect queryselect=new querySelect(" select * from \"~/Bureau\",\"documents\",\"c\",\"e\" ");
 		queryselect.ExtractClausesFrom();
 		Map<String, List<String>> result=queryselect.getQueryResult();
 		List<String> list=result.get("FROM");
@@ -33,7 +33,7 @@ public class querySelectTest{
 		assertEquals("e",list.get(0));
 		assertEquals("c",list.get(1));
 		assertEquals("documents",list.get(2));
-		assertEquals("Bureau",list.get(3));	
+		assertEquals("~/Bureau",list.get(3));	
 	}
 	
 	@Test

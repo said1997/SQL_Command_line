@@ -40,7 +40,7 @@ public class OsTraitementTest {
 	
 	@Test
 	public void getinitStatCommand() {
-		querySelect queryselect=new querySelect("select name,type from src");
+		querySelect queryselect=new querySelect("select name,type,size,ACCESSRIGHTS from src");
 		List<String> listStat = new ArrayList<String>();
 		queryselect.ExtractClausesSelect();
 		Map<String, List<String>> result=queryselect.getQueryResult();
