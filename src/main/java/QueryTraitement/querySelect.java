@@ -60,6 +60,7 @@ public class querySelect extends query {
 				ExtractAndFromWhere();
 			}
 			else {
+				//Select * FROM Bureau WHERE nom = test.txt 
 				transition = sqlnode.toString();
 				transition = transition.replace("(", "-");
 				transition = transition.replace(")", "-");
@@ -67,17 +68,31 @@ public class querySelect extends query {
 				transition = transition.replace("\n", "-");
 				transition = transition.replace("`", "-");
 				transition = transition.replace(" ", "-");
-				str =transition.split("");
+				str =transition.split("-");
 				for(int i=0; i<str.length; i++) {
-					while(str[i].equals("-") && (i<str.length -1)){
+					while(str[i].equals("")  && (i<str.length -1)){
 						i++;
 					}
 					tmp.add(str[i]);
 				}
-				if(tmp.get(tmp.size()-1).equals("-")) {
-					tmp.remove(tmp.get(tmp.size()-1));
-				}
-				this.queryResult.put("WHERE", tmp);
+				ArrayList<String> PointSupp = new ArrayList<String>();
+			    for (int j = 0; j < tmp.size(); j++) {
+			        if(tmp.get(j+1).equals(".")){
+			        	PointSupp.add(tmp.get(j)+tmp.get(j+1)+tmp.get(j+2));
+			        	j+=2;
+			        }
+			        PointSupp.add(tmp.get(j));
+			      }
+			    for(int i=0;i<PointSupp.size();i++) {
+			    	if(PointSupp.get(i).contains(".")) {
+			    		PointSupp.remove(i+1);
+			    	}
+			    }
+			    
+				if(PointSupp.get(PointSupp.size()-1).equals("-")) {
+					PointSupp.remove(PointSupp.get(PointSupp.size()-1));
+				}				
+				this.queryResult.put("WHERE", PointSupp);
 			}
 				} catch (SqlParseException e) {
 			e.printStackTrace();
