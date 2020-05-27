@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 public class querySelectTest{
 	
 	@Test
-	public void proto() {
-		assertTrue(1==1);
+	public void ExtractClausesWhereTEST() {
+		
 	}
 }

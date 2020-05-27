@@ -50,12 +50,13 @@ public class querySelect extends query {
 			SqlNode sqlnode = sel.getWhere();
 			String verifORAND = sqlnode.toString();
 			if(verifORAND.contains("OR")) {
-				ExtractOrFromWhere();
 				 tmp.add("OR");
 				this.queryResult.put("WHERE",tmp);
+				ExtractOrFromWhere();
 			}
 			else if(verifORAND.contains("AND")){
 				tmp.add("AND");
+				this.queryResult.put("WHERE",tmp);
 				ExtractAndFromWhere();
 			}
 			else {
@@ -152,7 +153,6 @@ public class querySelect extends query {
 			tmp.add(sqlBasicCallRight.operand(0).toString());
 			tmp.add(sqlBasicCallRight.getOperator().toString());
 			tmp.add(sqlBasicCallRight.operand(1).toString());
-			System.out.println(tmp);
 			this.queryResult.put (and_ou_or+"_right", tmp);
 			while (!sqlBasicCallLeft.operand(0).getKind().equals(SqlKind.IDENTIFIER) && !sqlBasicCallLeft.operand(1).getKind().equals(SqlKind.LITERAL)) {
 
