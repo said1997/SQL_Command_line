@@ -1,10 +1,9 @@
 package CommandInterface;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
 
 public class TableGenerator {
 
@@ -56,7 +55,7 @@ public class TableGenerator {
 
 		return stringBuilder.toString();
 	}
-
+ 
 	private void fillSpace(StringBuilder stringBuilder, int length)
 	{
 		for (int i = 0; i < length; i++) {
