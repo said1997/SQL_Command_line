@@ -96,7 +96,7 @@ public class querySelect extends query {
 	 * Types d'attributs de la clause where (type,name,size,contenent,extention, )
 	 * @throws SqlParseException 
 	 */
-	public void ExtractClausesWhere() throws SqlParseException {
+	/*public void ExtractClausesWhere() throws SqlParseException {
 		String transition = null;
 		String [] str;
 		ArrayList<String> tmp = new ArrayList<String>() ;
@@ -148,7 +148,7 @@ public class querySelect extends query {
 			}				
 			this.queryResult.put("WHERE", PointSupp);
 		}
-	}
+	}*/
 
 	/**
 	 *  Exctraire les sattributs de and de la clause Where et les mettre dans queryResult

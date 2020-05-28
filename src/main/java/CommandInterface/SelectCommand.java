@@ -78,9 +78,10 @@ public class SelectCommand implements InterfaceCommand {
 	    	 System.out.println("La requette a executer sur la table : "+chargingFromTable.replace("/", ""));
 	    	 res = statement.executeQuery(chargingFromTable.replace("/", ""));
 	    	 
+	    	 
 			 while (res.next()) {
 		        	for(String s : result.get("SELECT"))
-						System.out.print(res.getString(s));
+						System.out.print(" " + res.getString(s));
 		        	System.out.println(" Chargement depuis bdd \n ");
 					}
 		} catch (SQLException e) {

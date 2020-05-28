@@ -15,11 +15,11 @@ public class querySelectTest{
 	@Test
 	public void TestSelect() throws SqlParseException
 	{
-		querySelect queryselect=new querySelect("select name from Bureau");
+		querySelect queryselect=new querySelect("select size from Bureau where size=50");
 		queryselect.ExtractClausesSelect();
 		Map<String, List<String>> result=queryselect.getQueryResult();
 		List<String> list=result.get("SELECT");
-		assertTrue(list.get(0).equals(attributsOfFile.NOM.get()));
+		assertTrue(list.get(0).equals(attributsOfFile.SIZE.get()));
 		
 	}
 	@Test

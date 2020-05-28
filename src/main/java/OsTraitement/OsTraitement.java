@@ -147,12 +147,12 @@ public abstract class OsTraitement {
 		String arguments = new String("");
 		List<String> listSelectAttributs = new ArrayList<String>();
 		Map<String,String> SelectAttToStatAtt = new HashMap<String,String>();
-		SelectAttToStatAtt.put(attributsOfFile.NOM.get(),"%n, ");
-		SelectAttToStatAtt.put(attributsOfFile.TYPE.get(),"%F, ");
-		SelectAttToStatAtt.put(attributsOfFile.SIZE.get(),"%s, ");
-		SelectAttToStatAtt.put(attributsOfFile.ACCESRIGHTS.get(),"%A, ");
-		SelectAttToStatAtt.put(attributsOfFile.DATELACCES.get(),"%x, ");
-		SelectAttToStatAtt.put(attributsOfFile.DATELMODIFICATION.get(),"%y, ");
+		SelectAttToStatAtt.put(attributsOfFile.NOM.get(),"%n,");
+		SelectAttToStatAtt.put(attributsOfFile.TYPE.get(),"%F,");
+		SelectAttToStatAtt.put(attributsOfFile.SIZE.get(),"%s.,");
+		SelectAttToStatAtt.put(attributsOfFile.ACCESRIGHTS.get(),"%A,");
+		SelectAttToStatAtt.put(attributsOfFile.DATELACCES.get(),"%x,");
+		SelectAttToStatAtt.put(attributsOfFile.DATELMODIFICATION.get(),"%y,");
 		
 		listSelectAttributs=this.queryToOs.get("SELECT");
 		for(String s : listSelectAttributs) {
