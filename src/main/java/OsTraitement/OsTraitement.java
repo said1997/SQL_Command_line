@@ -119,7 +119,7 @@ public abstract class OsTraitement {
 	/**
 	 * Construction de la commende State
 	 */
-	public static String [] constructStatCommandSelect(Map<String,Boolean> flagsAttributs) {
+	public String [] constructStatCommandSelect(Map<String,Boolean> flagsAttributs) {
 		//stat --format "file name : %n, Type : %F, Size : %s, Access Rights : %A, Time Of last Access : %x, Time of last modif %y " target
 		String [] initStatCommand = new String [4];
 		initStatCommand[0]="stat";
@@ -132,7 +132,7 @@ public abstract class OsTraitement {
 	/**
 	 * Construction de la commende State
 	 */
-	public static String [] constructStatCommandFrom(String [] AttributSelect, String path) {
+	public String [] constructStatCommandFrom(String [] AttributSelect, String path) {
 		//stat --format "file name : %n, Type : %F, Size : %s, Access Rights : %A, Time Of last Access : %x, Time of last modif %y " target
 		AttributSelect[3]=path;
 		
@@ -143,9 +143,11 @@ public abstract class OsTraitement {
 	/**
 	 * Convert attributs of clause Select to OS
 	 */
-	public static String convertSelectAttributes(Map<String,Boolean> flagsAttributs) {
+	public  String convertSelectAttributes(Map<String,Boolean> flagsAttributs) {
 		String arguments = new String("");
-
+		
+		
+		
 		if(flagsAttributs.get(attributsOfFile.NOM.get()))
 			arguments = arguments + "file name : %n, " ;
 		if(flagsAttributs.get(attributsOfFile.TYPE.get()))
@@ -158,7 +160,7 @@ public abstract class OsTraitement {
 			arguments = arguments + "Time Of last Access : %x, " ;
 		if(flagsAttributs.get(attributsOfFile.DATELMODIFICATION.get()))
 			arguments = arguments + " Time of last modif %y " ;
-
+		
 		return arguments;
 	}
 
