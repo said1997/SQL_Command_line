@@ -22,6 +22,7 @@ public class SelectCommand implements InterfaceCommand {
 
 	@Override
 	public void execute() {
+		if(this.Command.contains("where") || this.Command.contains("WHERE"))
 		TablesInMemory.Create();
 		querySelect queryselect=new querySelect(this.Command);
 		queryselect.ExtractClausesSelect();
@@ -37,12 +38,12 @@ public class SelectCommand implements InterfaceCommand {
 			TableGenerator tableGenerator = new TableGenerator();
 			List<String> headersList = new ArrayList<>(); 
 			try {
+				if(this.Command.contains("where") || this.Command.contains("WHERE"))
 				TablesInMemory.CreateTableForAttrFrom(TablesInMemory.Connect(), tableName, result.get("SELECT"));
 			} catch (Exception e) {
 				System.out.println("Erreur de création de tables dans la bdd");
 				e.printStackTrace();
 			}
-			//System.out.print("Pour le dossier : "+tableName);
 		for(String colName : result.get("SELECT")) {
 			headersList.add(colName);
 		}
@@ -53,6 +54,7 @@ public class SelectCommand implements InterfaceCommand {
 		
 			for(String c : cmd.getFolderAndContainers(tableName)) {
 				for(String d : OsTraitement.executeCommand(cmd.constructStatCommandFrom(tab,c))) {
+					if(this.Command.contains("where") || this.Command.contains("WHERE"))
 					TablesInMemory.AddLineToTable(TablesInMemory.Connect(),tableName, d, result.get("SELECT"),this.Command);
 					colonne=d.split(",");
 					List<String> row = new ArrayList<>();
@@ -65,27 +67,39 @@ public class SelectCommand implements InterfaceCommand {
 				}
 				
 			}
-
-		//select size,name from src
 		System.out.println(tableGenerator.generateTable(headersList, rowsList)); 
 		}
 		
-		 
+		if(this.Command.contains("where") || this.Command.contains("WHERE")) { 
 		try {
+			TableGenerator tableGenerator = new TableGenerator();
+			List<String> headersList = new ArrayList<>();
+			
+			for(String colName : result.get("SELECT")) {
+				headersList.add(colName);
+			}
+			
+			List<List<String>> rowsList = new ArrayList<>();
+			
 			Statement statement = TablesInMemory.Connect().createStatement();
 	    	ResultSet res;
 	    	String chargingFromTable = this.Command.replace("\"", ""); 
-	    	 System.out.println("La requette a executer sur la table : "+chargingFromTable.replace("/", ""));
+	    	 System.out.println("Le résultat de la filtration à l'aide de la structure mémoire :");
 	    	 res = statement.executeQuery(chargingFromTable.replace("/", ""));
 	    	 
 			 while (res.next()) {
+				 List<String> row = new ArrayList<>();
 		        	for(String s : result.get("SELECT"))
-						System.out.print(res.getString(s));
-		        	System.out.println(" Chargement depuis bdd \n ");
+						row.add(res.getString(s));
+		        	//System.out.println(" Chargement depuis bdd \n ");
+		        	rowsList.add(row);
 					}
+			 System.out.println(tableGenerator.generateTable(headersList, rowsList)); 
+			 //TablesInMemory.CloseConnexion();
 		} catch (SQLException e) {
 			 
 			e.printStackTrace();
+		}
 		}
          
        

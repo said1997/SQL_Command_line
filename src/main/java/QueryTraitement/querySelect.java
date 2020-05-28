@@ -171,6 +171,7 @@ public class querySelect extends query {
 	 * @param newNode le nouveau noeud select
 	 */
 	public void setSelectNode (SqlNode newNode) {
+	
 		this.SelectNode = (SqlSelect)newNode;
 	}
 
