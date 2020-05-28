@@ -33,8 +33,29 @@ public class querySelect extends query {
 		SqlNodeList ListNode = (getSelectNode()).getSelectList();
 		for (int i=0;i<ListNode.size();i++)
 		{ 
-			SelectTable.add(ListNode.get(i).toString());
+			if (ListNode.get(i).toString().equals(attributsOfFile.NOM.get()) || 
+					ListNode.get(i).toString().equals(attributsOfFile.TYPE.get()) || 
+					ListNode.get(i).toString().equals(attributsOfFile.SIZE.get()) ||
+					ListNode.get(i).toString().equals(attributsOfFile.DATELACCES.get()) ||
+					ListNode.get(i).toString().equals(attributsOfFile.DATELMODIFICATION.get()) ||
+					ListNode.get(i).toString().equals(attributsOfFile.ACCESRIGHTS.get()) )
+				SelectTable.add(ListNode.get(i).toString());
+
+			else if (ListNode.get(i).toString().equals("*"))
+			{
+				SelectTable.add(attributsOfFile.NOM.get());
+				SelectTable.add(attributsOfFile.TYPE.get());
+				SelectTable.add(attributsOfFile.SIZE.get());
+				SelectTable.add(attributsOfFile.ACCESRIGHTS.get());
+				SelectTable.add(attributsOfFile.DATELACCES.get());
+				SelectTable.add(attributsOfFile.DATELMODIFICATION.get());
+
+			}
+
+
+			else System.err.print("Veuillez rentrer les bons parametres du select");
 		}
+
 		queryResult.put("SELECT", SelectTable);
 
 	}
@@ -50,16 +71,16 @@ public class querySelect extends query {
 		if (selectNode.getFrom().getKind().equals(SqlKind.IDENTIFIER))
 		{	
 			if(checkLowerOrOppCaseString(selectNode.getFrom().toString()))
-			  FromTables.add(selectNode.getFrom().toString());
+				FromTables.add(selectNode.getFrom().toString());
 			else
 				FromTables.add(selectNode.getFrom().toString().toLowerCase());
 		}
 		else {
 			SqlJoin join = (SqlJoin) selectNode.getFrom();
 			this.RecurisiveClausesFrom(join, selectNode, FromTables);
-			}
+		}
 		queryResult.put("FROM", FromTables);
-		
+
 	}
 
 	/**
@@ -68,7 +89,7 @@ public class querySelect extends query {
 	 */
 	private void ExtractClausesWhere() {
 
-		 SqlSelect sel = getSelectNode();
+		SqlSelect sel = getSelectNode();
 		SqlNode sqlnode = sel.getWhere();
 		this.node.put("WHERE", sqlnode);
 	}
@@ -77,9 +98,9 @@ public class querySelect extends query {
 	 *  Exctraire les sattributs de and de la clause Where et les mettre dans queryResult
 	 */
 	private void ExtractAndFromWhere() {
-		
+
 		String FindAnd = null;
-		 SqlSelect sel = getSelectNode();
+		SqlSelect sel = getSelectNode();
 		FindAnd = sel.getWhere().toString().toUpperCase();
 		if(FindAnd.contains("AND")) {
 			System.out.println("contains AND ");
@@ -91,9 +112,9 @@ public class querySelect extends query {
 	 *  Exctraire les sattributs de OR de la clause Where et les mettre dans queryResult
 	 */
 	private void ExtractOrFromWhere() {
-		
+
 		String FindOr = null;
-		 SqlSelect sel = getSelectNode();
+		SqlSelect sel = getSelectNode();
 		FindOr = sel.getWhere().toString().toUpperCase();
 		if(FindOr.contains("Or")) {
 			System.out.println("contains Or ");
@@ -129,7 +150,7 @@ public class querySelect extends query {
 				tables.add(join.getLeft().toString());
 			else
 				tables.add(join.getLeft().toString().toLowerCase());
-			
+
 			return tables;
 		}
 		else {
@@ -137,7 +158,7 @@ public class querySelect extends query {
 				tables.add(join.getRight().toString());
 			else
 				tables.add(join.getRight().toString().toLowerCase());
-			
+
 		}
 		return RecurisiveClausesFrom((SqlJoin) join.getLeft(),node,tables);
 
