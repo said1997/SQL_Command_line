@@ -123,7 +123,7 @@ public abstract class OsTraitement {
 		//stat --format "file name : %n, Type : %F, Size : %s, Access Rights : %A, Time Of last Access : %x, Time of last modif %y " target
 		String [] initStatCommand = new String [4];
 		initStatCommand[0]="stat";
-		initStatCommand[1]="--format";
+		initStatCommand[1]="-f";
 		initStatCommand[2]=convertSelectAttributes(flagsAttributs);
 		initStatCommand[3]="";
 		return initStatCommand;
@@ -147,13 +147,13 @@ public abstract class OsTraitement {
 		String arguments = new String("");
 		List<String> listSelectAttributs = new ArrayList<String>();
 		Map<String,String> SelectAttToStatAtt = new HashMap<String,String>();
-		SelectAttToStatAtt.put(attributsOfFile.NOM.get(),"%n, ");
-		SelectAttToStatAtt.put(attributsOfFile.TYPE.get(),"%F, ");
-		SelectAttToStatAtt.put(attributsOfFile.SIZE.get(),"%s, ");
-		SelectAttToStatAtt.put(attributsOfFile.ACCESRIGHTS.get(),"%A, ");
-		SelectAttToStatAtt.put(attributsOfFile.DATELACCES.get(),"%x, ");
-		SelectAttToStatAtt.put(attributsOfFile.DATELMODIFICATION.get(),"%y, ");
-		
+		SelectAttToStatAtt.put(attributsOfFile.NOM.get(),"%N, ");
+		SelectAttToStatAtt.put(attributsOfFile.TYPE.get(),"%HT%SY, ");
+		SelectAttToStatAtt.put(attributsOfFile.SIZE.get(),"%z, ");
+		SelectAttToStatAtt.put(attributsOfFile.ACCESRIGHTS.get(),"%Sp, ");
+		SelectAttToStatAtt.put(attributsOfFile.DATELACCES.get(),"%Sm, ");
+		SelectAttToStatAtt.put(attributsOfFile.DATELMODIFICATION.get(),"%Sm, ");
+		///Users/tokarev/Desktop   select * from "/Users/tokarev/Desktop"
 		listSelectAttributs=this.queryToOs.get("SELECT");
 		for(String s : listSelectAttributs) {
 			arguments = arguments + SelectAttToStatAtt.get(s);

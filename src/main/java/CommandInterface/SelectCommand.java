@@ -37,6 +37,7 @@ public class SelectCommand implements InterfaceCommand {
 		cmd.AddFromTraduction();
 		for(String s : result.get("FROM")) {
 			for(String c : cmd.getFolderAndContainers(s)) {
+				System.out.println(c);
 				for(String d : OsTraitement.executeCommand(cmd.constructStatCommandFrom(tab,c))) {
 					colonne=d.split(",");
 					List<String> row = new ArrayList<>();

@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Thu May 28 15:08:32 CEST 2020:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0172-5b66-0686-0000060ebcd8 
+on database directory memory:/Users/tokarev/Desktop/tergit/SQL_Command_line/BDD with class loader sun.misc.Launcher$AppClassLoader@7adf9f5f 
+Loaded from file:/Users/tokarev/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_171-b11
+user.dir=/Users/tokarev/Desktop/tergit/SQL_Command_line
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.15.4
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
