@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import GestionnaireJDBC.BDD;
 import OsTraitement.FindCommand;
 import OsTraitement.OsTraitement;
 import QueryTraitement.querySelect;
@@ -18,7 +19,8 @@ public class SelectCommand implements InterfaceCommand {
 
 	@Override
 	public void execute() {
-		
+		BDD.setNomBdd("BDD");
+		BDD.Bdd();
 		querySelect queryselect=new querySelect(this.Command);
 		queryselect.ExtractClausesSelect();
 		queryselect.ExtractClausesFrom();
@@ -29,9 +31,19 @@ public class SelectCommand implements InterfaceCommand {
 		
 		TableGenerator tableGenerator = new TableGenerator();
 		List<String> headersList = new ArrayList<>(); 
-		
-		for(String colName : result.get("SELECT"))
+		//Cration de la bdd en mémoire ainsi que la création du header de la table à afficher
+		for(String tableName : result.get("FROM") ) {
+			
+			try {
+				BDD.resetBddTables(tableName, result.get("SELECT"));
+			} catch (Exception e) {
+				System.out.println("Erreur de création de tables dans la bdd");
+				e.printStackTrace();
+			}
+		for(String colName : result.get("SELECT")) {
 			headersList.add(colName);
+		}
+		}
 		List<List<String>> rowsList = new ArrayList<>();
 		
 		cmd.AddFromTraduction();
