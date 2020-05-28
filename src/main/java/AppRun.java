@@ -38,31 +38,7 @@ public enum AppRun{
 
 		AppRun.run();
 		
-		TableGenerator tableGenerator = new TableGenerator();
-
-        List<String> headersList = new ArrayList<>(); 
-        headersList.add("F-Name");
-        headersList.add("Type");
-        headersList.add("Size");
-        headersList.add("ACCESS");
-        headersList.add("elwali");
-        
-        List<List<String>> rowsList = new ArrayList<>();
-
-       for (int i = 0; i < 6; i++) {
-            List<String> row = new ArrayList<>(); 
-            row.add("col1");
-            row.add("col2");
-            row.add("col3");
-            row.add("col4");
-            row.add("col5");
-            rowsList.add(row);
-        }
-
-        System.out.println(tableGenerator.generateTable(headersList, rowsList));  
-		
 	}
-
 
 }
 

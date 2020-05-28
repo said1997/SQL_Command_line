@@ -5,7 +5,7 @@ public enum attributsOfFile {
 	 * Les attributs de la table fichier
 	 */
 	TYPE("TYPE"),
-	NOM("NAME"),
+	NOM("PATH"),
 	SIZE("SIZE"),
 	EXTENTION("EXTENTION"),
 	DATE("DATE"),

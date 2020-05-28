@@ -145,22 +145,19 @@ public abstract class OsTraitement {
 	 */
 	public  String convertSelectAttributes(Map<String,Boolean> flagsAttributs) {
 		String arguments = new String("");
+		List<String> listSelectAttributs = new ArrayList<String>();
+		Map<String,String> SelectAttToStatAtt = new HashMap<String,String>();
+		SelectAttToStatAtt.put(attributsOfFile.NOM.get(),"%n, ");
+		SelectAttToStatAtt.put(attributsOfFile.TYPE.get(),"%F, ");
+		SelectAttToStatAtt.put(attributsOfFile.SIZE.get(),"%s, ");
+		SelectAttToStatAtt.put(attributsOfFile.ACCESRIGHTS.get(),"%A, ");
+		SelectAttToStatAtt.put(attributsOfFile.DATELACCES.get(),"%x, ");
+		SelectAttToStatAtt.put(attributsOfFile.DATELMODIFICATION.get(),"%y, ");
 		
-		
-		
-		if(flagsAttributs.get(attributsOfFile.NOM.get()))
-			arguments = arguments + "file name : %n, " ;
-		if(flagsAttributs.get(attributsOfFile.TYPE.get()))
-			arguments = arguments + "Type : %F, " ;
-		if(flagsAttributs.get(attributsOfFile.SIZE.get()))
-			arguments = arguments + "Size : %s, " ;
-		if(flagsAttributs.get(attributsOfFile.ACCESRIGHTS.get()))
-			arguments = arguments + "Access Rights : %A, " ;
-		if(flagsAttributs.get(attributsOfFile.DATELACCES.get()))
-			arguments = arguments + "Time Of last Access : %x, " ;
-		if(flagsAttributs.get(attributsOfFile.DATELMODIFICATION.get()))
-			arguments = arguments + " Time of last modif %y " ;
-		
+		listSelectAttributs=this.queryToOs.get("SELECT");
+		for(String s : listSelectAttributs) {
+			arguments = arguments + SelectAttToStatAtt.get(s);
+		}
 		return arguments;
 	}
 

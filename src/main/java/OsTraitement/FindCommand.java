@@ -135,6 +135,7 @@ public class FindCommand extends OsTraitement {
 	 * @return la liste après modification
 	 */
 	private Map<String, Boolean> setFlagsAttributs(Map<String, Boolean> toSet, String Key){
+
 		toSet.put(Key, true);
 		return toSet;
 	}
@@ -150,10 +151,10 @@ public class FindCommand extends OsTraitement {
 		List<String> ResultLs = new ArrayList<String>();
 		
 		for(String Ap : Elements) {
-			if(Ap.endsWith("/"))
+			//if(Ap.endsWith("/"))
 			ResultLs.add(Apath+"/"+Ap);
-			else
-			 ResultLs.add(Ap);
+			//else
+			 //ResultLs.add(Apath);
 		}
 		return ResultLs;
 	}
