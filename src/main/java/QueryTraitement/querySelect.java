@@ -54,7 +54,10 @@ public class querySelect extends query {
 			}
 					
 			
-			else System.err.print("Veuillez rentrer les bons parametres du select");
+			else { 
+				System.err.print("Veuillez rentrer les bons parametres du select");
+				System.exit(0);
+			}
 		}
 		
 		queryResult.put("SELECT", SelectTable);
