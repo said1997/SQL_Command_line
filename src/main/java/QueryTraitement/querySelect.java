@@ -9,8 +9,10 @@ import org.apache.calcite.sql.SqlJoin;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlNodeList;
+import org.apache.calcite.sql.SqlOrderBy;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.parser.SqlParseException;
+import org.apache.calcite.sql.parser.SqlParser;
 
 
 public class querySelect extends query {
@@ -23,44 +25,51 @@ public class querySelect extends query {
 
 	public querySelect(final String query) {
 		super(query);
-		setSelectNode(this.parseQuery());
+		setSelectNode(ParseSelectQuery());
 
 	}
 	/**
 	 * extraire les attributs de la clause Select et les mettre dans queryResult
 	 */
 	public void ExtractClausesSelect() {
+
 		ArrayList<String> SelectTable=new ArrayList<String>();
-		SqlNodeList ListNode = (getSelectNode()).getSelectList();
-		for (int i=0;i<ListNode.size();i++)
-		{ 
-			if (ListNode.get(i).toString().equals(attributsOfFile.NOM.get()) || 
-				ListNode.get(i).toString().equals(attributsOfFile.TYPE.get()) || 
-				ListNode.get(i).toString().equals(attributsOfFile.SIZE.get()) ||
-				ListNode.get(i).toString().equals(attributsOfFile.DATELACCES.get()) ||
-				ListNode.get(i).toString().equals(attributsOfFile.DATELMODIFICATION.get()) ||
-				ListNode.get(i).toString().equals(attributsOfFile.ACCESRIGHTS.get()) )
-				SelectTable.add(ListNode.get(i).toString());
-			
-			else if (ListNode.get(i).toString().equals("*"))
-			{
-				SelectTable.add(attributsOfFile.NOM.get());
-				SelectTable.add(attributsOfFile.TYPE.get());
-				SelectTable.add(attributsOfFile.SIZE.get());
-				SelectTable.add(attributsOfFile.ACCESRIGHTS.get());
-				SelectTable.add(attributsOfFile.DATELACCES.get());
-				SelectTable.add(attributsOfFile.DATELMODIFICATION.get());
-				
+		if (getSelectNode() != null) {
+			SqlSelect selectNode =(SqlSelect) getSelectNode();
+			SqlNodeList ListNode = selectNode.getSelectList();
+			for (int i=0;i<ListNode.size();i++)
+			{ 
+				if (ListNode.get(i).toString().equals(attributsOfFile.NOM.get()) || 
+						ListNode.get(i).toString().equals(attributsOfFile.TYPE.get()) || 
+						ListNode.get(i).toString().equals(attributsOfFile.SIZE.get()) ||
+						ListNode.get(i).toString().equals(attributsOfFile.DATELACCES.get()) ||
+						ListNode.get(i).toString().equals(attributsOfFile.DATELMODIFICATION.get()) ||
+						ListNode.get(i).toString().equals(attributsOfFile.ACCESRIGHTS.get()) )
+					SelectTable.add(ListNode.get(i).toString());
+
+				else if (ListNode.get(i).toString().equals("*"))
+				{
+					SelectTable.add(attributsOfFile.NOM.get());
+					SelectTable.add(attributsOfFile.TYPE.get());
+					SelectTable.add(attributsOfFile.SIZE.get());
+					SelectTable.add(attributsOfFile.ACCESRIGHTS.get());
+					SelectTable.add(attributsOfFile.DATELACCES.get());
+					SelectTable.add(attributsOfFile.DATELMODIFICATION.get());
+
+				}
+
+
+				else { 
+					System.err.print("Veuillez rentrer les bons parametres du select");
+					System.exit(0);
+				}
 			}
-					
-			
-			else { 
-				System.err.print("Veuillez rentrer les bons parametres du select");
-				System.exit(0);
-			}
+
+			queryResult.put("SELECT", SelectTable);
 		}
-		
-		queryResult.put("SELECT", SelectTable);
+		else {
+			System.err.println("Le select node est null");
+		}
 
 	}
 
@@ -68,23 +77,27 @@ public class querySelect extends query {
 	 * Exctraire le attributs de la clause From et les mettre dans queryResult
 	 */
 	public void ExtractClausesFrom() {
+		if (getSelectNode() != null) {
+			SqlSelect selectNode =(SqlSelect) getSelectNode();
+			List<String> FromTables=new ArrayList<String>();
 
-		SqlSelect selectNode =(SqlSelect) getSelectNode();
-		List<String> FromTables=new ArrayList<String>();
-
-		if (selectNode.getFrom().getKind().equals(SqlKind.IDENTIFIER))
-		{	
-			if(checkLowerOrOppCaseString(selectNode.getFrom().toString()))
-			  FromTables.add(selectNode.getFrom().toString());
-			else
-				FromTables.add(selectNode.getFrom().toString().toLowerCase());
+			if (selectNode.getFrom().getKind().equals(SqlKind.IDENTIFIER))
+			{	
+				if(checkLowerOrOppCaseString(selectNode.getFrom().toString()))
+					FromTables.add(selectNode.getFrom().toString());
+				else
+					FromTables.add(selectNode.getFrom().toString().toLowerCase());
+			}
+			else {
+				SqlJoin join = (SqlJoin) selectNode.getFrom();
+				this.RecurisiveClausesFrom(join, selectNode, FromTables);
+			}
+			queryResult.put("FROM", FromTables);
 		}
 		else {
-			SqlJoin join = (SqlJoin) selectNode.getFrom();
-			this.RecurisiveClausesFrom(join, selectNode, FromTables);
-			}
-		queryResult.put("FROM", FromTables);
-		
+			System.err.println("Le SelectNode est null");
+		}
+
 	}
 
 	/**
@@ -100,11 +113,11 @@ public class querySelect extends query {
 		String transition = null;
 		String [] str;
 		ArrayList<String> tmp = new ArrayList<String>() ;
-		 SqlSelect sel = (SqlSelect) getSelectNode();
+		SqlSelect sel = (SqlSelect) getSelectNode();
 		SqlNode sqlnode = sel.getWhere();
 		String verifORAND = sqlnode.toString();
 		if(verifORAND.contains("OR")) {
-			 tmp.add("OR");
+			tmp.add("OR");
 			this.queryResult.put("WHERE",tmp);
 			ExtractOrFromWhere();
 		}
@@ -130,19 +143,19 @@ public class querySelect extends query {
 				tmp.add(str[i]);
 			}
 			ArrayList<String> PointSupp = new ArrayList<String>();
-		    for (int j = 0; j < tmp.size(); j++) {
-		        if(tmp.get(j+1).equals(".")){
-		        	PointSupp.add(tmp.get(j)+tmp.get(j+1)+tmp.get(j+2));
-		        	j+=2;
-		        }
-		        PointSupp.add(tmp.get(j));
-		      }
-		    for(int i=0;i<PointSupp.size();i++) {
-		    	if(PointSupp.get(i).contains(".")) {
-		    		PointSupp.remove(i+1);
-		    	}
-		    }
-		    
+			for (int j = 0; j < tmp.size(); j++) {
+				if(tmp.get(j+1).equals(".")){
+					PointSupp.add(tmp.get(j)+tmp.get(j+1)+tmp.get(j+2));
+					j+=2;
+				}
+				PointSupp.add(tmp.get(j));
+			}
+			for(int i=0;i<PointSupp.size();i++) {
+				if(PointSupp.get(i).contains(".")) {
+					PointSupp.remove(i+1);
+				}
+			}
+
 			if(PointSupp.get(PointSupp.size()-1).equals("-")) {
 				PointSupp.remove(PointSupp.get(PointSupp.size()-1));
 			}				
@@ -171,7 +184,7 @@ public class querySelect extends query {
 	 * @param newNode le nouveau noeud select
 	 */
 	public void setSelectNode (SqlNode newNode) {
-	
+
 		this.SelectNode = (SqlSelect)newNode;
 	}
 
@@ -195,7 +208,7 @@ public class querySelect extends query {
 				tables.add(join.getLeft().toString());
 			else
 				tables.add(join.getLeft().toString().toLowerCase());
-			
+
 			return tables;
 		}
 		else {
@@ -203,12 +216,37 @@ public class querySelect extends query {
 				tables.add(join.getRight().toString());
 			else
 				tables.add(join.getRight().toString().toLowerCase());
-			
+
 		}
 		return RecurisiveClausesFrom((SqlJoin) join.getLeft(),node,tables);
 
 	}
-	
+
+	/**
+	 * Retourner un SqlNode au debut même si elle commance par un noeud Order by
+	 */
+	private SqlSelect ParseSelectQuery() {
+
+		if (getQuery() == null || getQuery().length() == 0) {
+			System.err.println("Veuillez entrer un requette non vide");
+			return null;
+		}
+
+		SqlNode all = parseQuery();
+		SqlSelect query;
+		if (all instanceof SqlSelect) {
+			query = (SqlSelect) all;
+			return query;
+
+		} else if (all instanceof SqlOrderBy) {
+			query = (SqlSelect) ((SqlOrderBy) all).query;
+			return query;
+		} else {
+			throw new UnsupportedOperationException("The select query is type of " + all.getClass() + " which is not supported here");
+		}
+	}
+
+
 	/*
 	 * Gestion generique des de la persence des AND et OR dans un WHERE
 	 */
@@ -243,7 +281,7 @@ public class querySelect extends query {
 			looptmp.add(sqlBasicCallLeft.operand(1).toString());
 			this.queryResult.put (and_ou_or+"_left", looptmp);
 		}
-		
+
 	}
 
 }
