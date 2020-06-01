@@ -1,5 +1,7 @@
 package CommandInterface;
 
+import java.sql.SQLException;
+
 public interface InterfaceCommand {
-	public void execute();
+	public void execute() throws SQLException;
 }

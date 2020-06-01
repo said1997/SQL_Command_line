@@ -1,23 +1,27 @@
 package QueryTraitement;
 
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.calcite.sql.SqlIdentifier;
-import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlNodeList;
-import org.apache.calcite.sql.SqlOrderBy;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.parser.SqlParseException;
 import org.apache.calcite.sql.parser.SqlParser;
+import org.apache.calcite.sql.parser.SqlParserPos;
 import org.apache.calcite.sql.util.SqlBasicVisitor;
 import org.apache.calcite.sql.util.SqlVisitor;
-import com.google.common.base.Preconditions;
+import org.apache.calcite.util.Pair;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 
 public class CalciteParser {
@@ -36,10 +40,10 @@ public class CalciteParser {
                     "Failed to parse expression \'" + sql + "\', please make sure the expression is valid", e);
         }
 
-        Preconditions.checkArgument(selectList.size() < 6,
-                "Expression is invalid because size of select list exceeds six");
+        Preconditions.checkArgument(selectList.size() == 1,
+                "Expression is invalid because size of select list exceeds one");
 
-        return selectList;
+        return selectList.get(0);
     }
 
     public static SqlNode getExpNode(String expr) {
@@ -59,7 +63,7 @@ public class CalciteParser {
         SqlVisitor sqlVisitor = new SqlBasicVisitor() {
             @Override
             public Object visit(SqlIdentifier id) {
-                if (id.names.size() > 1) {
+                if (id.names.size() > 6) {
                     throw new IllegalArgumentException(
                             "Column Identifier in the computed column expression should only contain COLUMN");
                 }
@@ -69,41 +73,38 @@ public class CalciteParser {
 
         sqlNode.accept(sqlVisitor);
     }
-    
-    /**
-     * Check if the SELECT query has join operation
-     */
-    public static SqlSelect hasJoinOperation(String selectQuery) {
-     
-    	if (selectQuery == null || selectQuery.length() == 0) {
-    		return null;
-    		}
-   
-      SqlParser sqlParser = SqlParser.create(selectQuery);
-      try {
-    	 
 
-        SqlNode all = sqlParser.parseQuery();
-        System.out.println(" which is not supported here");
-        SqlSelect query;
-       
-        if (all instanceof SqlSelect) {
-          query = (SqlSelect) all;
-          return query;
-          
-        } else if (all instanceof SqlOrderBy) {
-          query = (SqlSelect) ((SqlOrderBy) all).query;
-          return query;
-        } else {
-        	System.out.println("The select query is type of " + all.getClass() + " which is not supported here");
+    public static String insertAliasInExpr(String expr, String alias) {
+        String prefix = "select ";
+        String suffix = " from t";
+        String sql = prefix + expr + suffix;
+        SqlNode sqlNode = getOnlySelectNode(sql);
+
+        final Set<SqlIdentifier> s = Sets.newHashSet();
+        SqlVisitor sqlVisitor = new SqlBasicVisitor() {
+            @Override
+            public Object visit(SqlIdentifier id) {
+                if (id.names.size() > 1) {
+                    throw new IllegalArgumentException("SqlIdentifier " + id + " contains DB/Table name");
+                }
+                s.add(id);
+                return null;
+            }
+        };
+
+        sqlNode.accept(sqlVisitor);
+        List<SqlIdentifier> sqlIdentifiers = Lists.newArrayList(s);
+
+        descSortByPosition(sqlIdentifiers);
+
+        for (SqlIdentifier sqlIdentifier : sqlIdentifiers) {
+            Pair<Integer, Integer> replacePos = getReplacePos(sqlIdentifier, sql);
+            int start = replacePos.getValue();
+            sql = sql.substring(0, start) + alias + "." + sql.substring(start);
         }
-      } catch (SqlParseException e) {
-    	  System.out.println("Type de requette non détecté : ");
-        return null;
-      }
-	return null;
-    }
 
+        return sql.substring(prefix.length(), sql.length() - suffix.length());
+    }
 
     public static void descSortByPosition(List<SqlIdentifier> sqlIdentifiers) {
         Collections.sort(sqlIdentifiers, new Comparator<SqlIdentifier>() {
@@ -118,6 +119,92 @@ public class CalciteParser {
         });
     }
 
-      
-   
+    public static Pair<Integer, Integer> getReplacePos(SqlNode node, String inputSql) {
+        if (inputSql == null) {
+            Pair Pair;
+			return Pair = new Pair(0, 0);
+        }
+        String[] lines = inputSql.split("\n");
+        SqlParserPos pos = node.getParserPosition();
+        int lineStart = pos.getLineNum();
+        int lineEnd = pos.getEndLineNum();
+        int columnStart = pos.getColumnNum() - 1;
+        int columnEnd = pos.getEndColumnNum();
+        //for the case that sql is multi lines
+        for (int i = 0; i < lineStart - 1; i++) {
+            columnStart += lines[i].length() + 1;
+        }
+        for (int i = 0; i < lineEnd - 1; i++) {
+            columnEnd += lines[i].length() + 1;
+        }
+        //for calcite's bug CALCITE-1875
+        Pair<Integer, Integer> startEndPos = getPosWithBracketsCompletion(inputSql, columnStart, columnEnd);
+        return startEndPos;
     }
+
+    private static Pair<Integer, Integer> getPosWithBracketsCompletion(String inputSql, int left, int right) {
+        int leftBracketNum = 0;
+        int rightBracketNum = 0;
+        String substring = inputSql.substring(left, right);
+        for (int i = 0; i < substring.length(); i++) {
+            char temp = substring.charAt(i);
+            if (temp == '(') {
+                leftBracketNum++;
+            }
+            if (temp == ')') {
+                rightBracketNum++;
+                if (leftBracketNum < rightBracketNum) {
+                    while ('(' != inputSql.charAt(left - 1)) {
+                        left--;
+                    }
+                    left--;
+                    leftBracketNum++;
+                }
+            }
+        }
+        while (rightBracketNum < leftBracketNum) {
+            while (')' != inputSql.charAt(right)) {
+                right++;
+            }
+            right++;
+            rightBracketNum++;
+        }
+        return new Pair(left, right);
+    }
+
+    public static String replaceAliasInExpr(String expr, Map<String, String> renaming) {
+        String prefix = "select ";
+        String suffix = " from t";
+        String sql = prefix + expr + suffix;
+        SqlNode sqlNode = CalciteParser.getOnlySelectNode(sql);
+
+        final Set<SqlIdentifier> s = Sets.newHashSet();
+        SqlVisitor sqlVisitor = new SqlBasicVisitor() {
+            @Override
+            public Object visit(SqlIdentifier id) {
+                Preconditions.checkState(id.names.size() == 2);
+                s.add(id);
+                return null;
+            }
+        };
+
+        sqlNode.accept(sqlVisitor);
+        List<SqlIdentifier> sqlIdentifiers = Lists.newArrayList(s);
+
+        CalciteParser.descSortByPosition(sqlIdentifiers);
+
+        for (SqlIdentifier sqlIdentifier : sqlIdentifiers) {
+            Pair<Integer, Integer> replacePos = CalciteParser.getReplacePos(sqlIdentifier, sql);
+            int start = replacePos.getValue();
+            int end = replacePos.getValue();
+            String aliasInExpr = sqlIdentifier.names.get(0);
+            String col = sqlIdentifier.names.get(1);
+            String renamedAlias = renaming.get(aliasInExpr);
+            Preconditions.checkNotNull(renamedAlias,
+                    "rename for alias " + aliasInExpr + " in expr (" + expr + ") is not found");
+            sql = sql.substring(0, start) + renamedAlias + "." + col + sql.substring(end);
+        }
+
+        return sql.substring(prefix.length(), sql.length() - suffix.length());
+    }
+}

@@ -38,7 +38,7 @@ public class OsTraitementTest {
 		
 	}
 	
-	@Test
+	/*@Test
 	public void getinitStatCommand() {
 		querySelect queryselect=new querySelect("select name,type,size,ACCESSRIGHTS from \"/home/said/Bureau/\" ");
 		List<String> listStat = new ArrayList<String>();
@@ -47,7 +47,7 @@ public class OsTraitementTest {
 		Map<String, List<String>> result=queryselect.getQueryResult();
 		FindCommand cmd = new FindCommand(result);
 		String [] tab = cmd.addSelectTraduction();
-		listStat=OsTraitement.executeCommand(cmd.addSelectTraduction());
+		//listStat=OsTraitement.executeCommand(cmd.addSelectTraduction());
 		cmd.AddFromTraduction();
 		for(String s : result.get("FROM")) {
 			for(String c : cmd.getFolderAndContainers(s)) {
@@ -59,5 +59,5 @@ public class OsTraitementTest {
 			}
 		}
 
-	}
+	}*/
 }

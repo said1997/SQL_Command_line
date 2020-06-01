@@ -11,7 +11,7 @@ public class StructureInMemoryTest {
 
 	@Test
 	public void test() throws Exception{
-		TablesInMemory.Create();
+		//TablesInMemory.Create();
 		
 	}
 }

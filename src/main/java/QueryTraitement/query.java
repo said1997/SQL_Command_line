@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.calcite.sql.SqlNode;
-import org.apache.calcite.sql.SqlOrderBy;
-import org.apache.calcite.sql.SqlSelect;
-import org.apache.calcite.sql.parser.SqlParseException;
 import org.apache.calcite.sql.parser.SqlParser;
 
 public abstract class query {
@@ -30,10 +27,6 @@ public abstract class query {
 	 */
 	protected Map<String,List<String>> queryResult;
 	
-	/**
-	 * Un node sql après le traitement sous fore d'une clé qui est le noeud et un sql Node.
-	 */
-	protected Map<String,SqlNode> node;
 	
 	/**
 	 * Constructeur de cette classe
@@ -43,7 +36,43 @@ public abstract class query {
 		this.setQuery(query);
 		this.setParser(getQuery());
 		queryResult = new HashMap<String,List<String>>();
-		node = new HashMap<String,SqlNode>();
+	}
+	
+	/**
+	 * Parser la requette query.
+	 * @return un SqlNode le premier noeud de la requette.
+	 */
+	protected SqlNode parseQuery() {
+		try { 
+			return this.parser.parseQuery();
+		}
+		catch (Exception e) {
+			System.err.println("Erreur dans la syntaxe de la requette");
+			return null;
+		}
+	}
+	
+	/**
+	 * crée un parseur pour la requette à parser
+	 * @param parser
+	 */
+	public void setParser(final String query) {
+		this.parser = SqlParser.create(query);
+	}
+	
+	/**
+	 * Retourne le parser de la requette à parser
+	 * @return
+	 */
+	public SqlParser getParser() {
+		return this.parser;
+	}
+	
+	/**
+	 * Set la requette à parser
+	 */
+	public void setQuery(final String query) {
+		this.queryToParse=query;
 	}
 	
 	/**
@@ -55,92 +84,29 @@ public abstract class query {
 	}
 	
 	/**
-	 * Set la requette à parser
-	 */
-	public void setQuery(final String query) {
-		this.queryToParse=query;
-	}
-	
-	/**
-	 * Parser la requette query.
-	 * @return un SqlNode le premier noeud de la requette.
-	 */
-	protected SqlNode parseQuery() {
-		try { 
-			
-			return this.parser.parseQuery();
-		}
-		catch (Exception e) {
-			System.err.println("Erreur dans la syntaxe de la requette");
-			return null;
-		}
-	}
-	
-	/**
-	 * Retourne le parser se la requette à parser
-	 * @return
-	 */
-	public SqlParser getParser() {
-		return this.parser;
-	}
-
-	/**
-	 * crée un parseur pour la requette à parser
-	 * @param parser
-	 */
-	public void setParser(final String query) {
-		this.parser = SqlParser.create(query);
-	}
-	
-	/**
-	 * Retourner la querry final à en voyer au module OS
-	 * @return
+	 * Retourner la querry final à envoyer au module OS.
+	 * @return queryResult une map qui à comme clé la clause et valeur la liste des ses attributs.
 	 */
 	public Map<String,List<String>> getQueryResult(){
 		return this.queryResult;
 	}
-	
+		
 	
 	/**
-	 * Remplir la hash map à envoyer au module OS
-	 * @param Clause la clause qui est la valeur de la clé
-	 * @param attribut la trribut a ajout 
+	 * Remplir la hash map à envoyer au module OS.
+	 * @param Clause la clause qui est la valeur de la clé.
+	 * @param attribut la Liste des atrributs à ajouter. 
 	 */
 	public void setQueryResult(String Clause, List<String> attributs) {
 		this.queryResult.put(Clause,attributs);
 	}
 	
-	/**
-	 * Remplir la hash map d'un noeur avec des sous noeuds si il esxistent
-	 * @param Clause la clause qui est la valeur de la clé
-	 * @param attribut la trribut a ajout 
-	 */
-	public void setSousNode(String Clause, SqlNode sousNoeud) {
-		this.node.put(Clause,sousNoeud);
-		
-	}
 	
 	/**
-	 * Retourne la hash map d'un avec ses sous noeuds si ils existent.
-	 * @param Clause la clause qui est la valeur de la clé
-	 * @param attribut la trribut a ajout 
-	 */
-	public SqlNode getSousNode(String Clause) {
-		if (this.node.get(Clause) != null) {
-			return this.node.get(Clause); 
-		}else {
-			return null;
-		}
-		
-	}
-	
-	
-	
-	
-	
-	/**
-	 * Regarde si elle contient au moin une minuscule ou une majuscule.
-	 * @param str prends une chaine de caractère.
+	 * Regarde si une chaine de caractères contient au moin une minuscule ou une majuscule.
+	 * Si un utilisateur entre un chemin en minuscule il sera remis en minuscules après le traitement de la requette.
+	 * Si un utilisateur entre des caractères spéciaux ou des majuscules il doit mettre des " " pour l'attribut. 
+	 * @param str une chaine de caractères.
 	 * @return boolean true or false.
 	 */
 	protected boolean checkLowerOrOppCaseString(String str) {

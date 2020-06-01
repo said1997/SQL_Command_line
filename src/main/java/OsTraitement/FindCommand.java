@@ -8,79 +8,42 @@ import java.util.Map;
 import QueryTraitement.attributsOfFile;
 
 public class FindCommand extends OsTraitement {
-	//https://www.howtogeek.com/451022/how-to-use-the-stat-command-on-linux/
-	//lien documentation ls http://manpagesfr.free.fr/man/man1/ls.1.html
-	//du -sh --apparent-size ./Bureau/ afiicher la taille réelle
-	//ls -alld */ afficher tout les dossier 
-	//ls -allF | grep -v '/$' afficher tout les fichiers
-	//stat --format "la taille du fichier %z" src/
+	
 	/**
-	 * Constructeur de cette classe
-	 * @param toTraduct
+	 * Constructeur de la classe OsTraitement
+	 * @param toTraduct map qui contient comme clé Une clause et la liste des ses attributs.
 	 */
 	public FindCommand(Map<String, List<String>> toTraduct) {
 		super(toTraduct);
 	}
 
-	/**
-	 * Traduction de la clause From language OS.
-	 * @return paths la liste des clauses from
-	 */
-	public void AddFromTraduction(){
-		List<String> paths = new ArrayList<String>();
-		if (queryToOs.containsKey("FROM")) {
-			paths = queryToOs.get("FROM");
-			if(paths.size() != 0) {
-				for(String p : paths) {
-					addToFolderAndContainers(p, getListElementsOfFolder(p));
-				}
-			}
-			else {
-				System.err.println("Aucun attribut From");
-			}
-		}
-	}
 
 	/**
-	 * Obtenir tout les élément d'un dossier.
-	 * @param le chemin d'un dossier.
-	 * @return List les élément d'un dossier
-	 */
-	public List<String> getListElementsOfFolder(String path) {
-		List <String> ResultLsCommand = new ArrayList<String>();
-		ResultLsCommand = executeCommand("ls -F "+path);
-		return AddPathAbsolut(ResultLsCommand,path);
-
-	}
-
-	/**
-	 * Traduction de la clause select en commande OS
+	 * Traduction de la clause select en commande OS.
+	 * Pour chaque attribut présent dans la clause select on met son flag à true.
+	 * @return Un tableau contenant la construction de la commende Shelle à qui le chemin du dossier sur la quel l'ecuter sera donné après.
 	 */
 	public String[] addSelectTraduction() {
 
 		Map<String, Boolean> flagAttribut = new HashMap<String, Boolean>();
 
-		initFlagsAttributs(flagAttribut);
+		initFlagsAttributs(flagAttribut,false);
 
 		if (queryToOs.containsKey("SELECT")) {
-			addToCommand("ls");
 			List<String> list = queryToOs.get("SELECT");
 			for(String l : list) {
 				if(l.equals("*")) {
-					setFlagsAttributs(flagAttribut, attributsOfFile.NOM.get());
-					setFlagsAttributs(flagAttribut, attributsOfFile.TYPE.get());
-					setFlagsAttributs(flagAttribut, attributsOfFile.DATE.get());
-					setFlagsAttributs(flagAttribut, attributsOfFile.SIZE.get());
-					setFlagsAttributs(flagAttribut, attributsOfFile.DATELACCES.get());
-					setFlagsAttributs(flagAttribut, attributsOfFile.DATELMODIFICATION.get());
-					setFlagsAttributs(flagAttribut, attributsOfFile.ACCESRIGHTS.get());
+					initFlagsAttributs(flagAttribut,true);
 				}
 				else {
-					if(l.equals(attributsOfFile.NOM.get())) {
-						setFlagsAttributs(flagAttribut, attributsOfFile.NOM.get());
+					if(l.equals(attributsOfFile.PATH.get())) {
+						setFlagsAttributs(flagAttribut, attributsOfFile.PATH.get());
 					}
 					if(l.equals(attributsOfFile.TYPE.get())) {
 						setFlagsAttributs(flagAttribut, attributsOfFile.TYPE.get());
+					}
+					if(l.equals(attributsOfFile.DATE.get())) {
+						setFlagsAttributs(flagAttribut, attributsOfFile.DATE.get());
 					}
 					if(l.equals(attributsOfFile.DATE.get())) {
 						setFlagsAttributs(flagAttribut, attributsOfFile.DATE.get());
@@ -99,52 +62,82 @@ public class FindCommand extends OsTraitement {
 					}
 				}
 			}
-			return constructStatCommandSelect(flagAttribut);
+			return super.constructStatCommandSelect(flagAttribut);
 		}
 		System.err.println("Pas de clause Select");
 		return null;
 	}
+	
+
 	/**
-	 * Ajouter un attribut a la ligne de commande
-	 * @param toAdd le paramètre os correspendant à ajouter dans Command.
+	 * Traduction de la clause From language OS.
+	 * Chaque attribut de from est un dossier.
+	 * @return paths la liste des clauses from
 	 */
-	private void addToCommand(String toAdd) {
-		setCommand(getCommand() + toAdd);
+	public void AddFromTraduction(){
+		List<String> paths = new ArrayList<String>();
+		if (queryToOs.containsKey("FROM")) {
+			paths = queryToOs.get("FROM");
+			if(paths.size() != 0) {
+				for(String p : paths) {
+					addToFolderAndContainers(p, getListElementsOfFolder(p));
+				}
+			}
+			else {
+				System.err.println("Aucun attribut From");
+			}
+		}
+	}
+	
+	/**
+	 * Obtenir tout les élément d'un dossier.
+	 * @param le chemin d'un dossier.
+	 * @return List les élément d'un dossier
+	 */
+	public List<String> getListElementsOfFolder(String path) {
+		List <String> ResultLsCommand = new ArrayList<String>();
+		ResultLsCommand = super.executeCommand("ls -F "+path);
+		return AddPathAbsolut(ResultLsCommand,path);
 
 	}
-
+	
 	/**
-	 * Initialisation des attributs de Select
-	 */
-	private Map<String, Boolean> initFlagsAttributs(Map<String, Boolean> initFlags){
-
-		initFlags.put(attributsOfFile.DATE.get(), false);
-		initFlags.put(attributsOfFile.TYPE.get(), false);
-		initFlags.put(attributsOfFile.NOM.get(), false);
-		initFlags.put(attributsOfFile.SIZE.get(), false);
-		initFlags.put(attributsOfFile.EXTENTION.get(), false);
-		initFlags.put(attributsOfFile.DATELMODIFICATION.get(), false);
-		initFlags.put(attributsOfFile.DATELACCES.get(), false);
-		initFlags.put(attributsOfFile.ACCESRIGHTS.get(), false);
-
-		return initFlags;
-	}
-
-	/**
-	 * Mettre un attribut de la clause select en true c'est à dire qu'on doit le chercher
-	 * @return la liste après modification
+	 * Mettre un attribut de la clause select en true c'est à dire qu'il sera ajouté à la construction de la commande Stat à executer.
+	 * @param toSet la mao qui contient comme clé lattribut de la clause select et comme valeur l'état de de lattribut si il est présent ou non.
+	 * @param Key lattribut qui sera activé.
+	 * @return toSet la map après avoir définit le statut de son attribut.
 	 */
 	private Map<String, Boolean> setFlagsAttributs(Map<String, Boolean> toSet, String Key){
-
 		toSet.put(Key, true);
 		return toSet;
 	}
 
 	/**
-	 * Methode qui ajoute le path absolut aux élements d'un dossier
-	 * @param Les elements de la liste
-	 * @param le absolute path à ajouter à chaque élément
-	 * @return Les elements avec les chemins absolut ajoutés
+	 * Initialisation des flags pour l'ensemble des attributs de la clause select.
+	 * @param toinitFlags une map qui a comme clé le flag et son état présent ou pas dans la clause select.
+	 * @return la map après initialisation.
+	 */
+	private Map<String, Boolean> initFlagsAttributs(Map<String, Boolean> toInitFlags, Boolean isInClauseSelect){
+
+		toInitFlags.put(attributsOfFile.DATE.get(), isInClauseSelect);
+		toInitFlags.put(attributsOfFile.TYPE.get(), isInClauseSelect);
+		toInitFlags.put(attributsOfFile.PATH.get(), isInClauseSelect);
+		toInitFlags.put(attributsOfFile.DATE.get(), isInClauseSelect);
+		toInitFlags.put(attributsOfFile.SIZE.get(), isInClauseSelect);
+		toInitFlags.put(attributsOfFile.DATELMODIFICATION.get(), isInClauseSelect);
+		toInitFlags.put(attributsOfFile.DATELACCES.get(), isInClauseSelect);
+		toInitFlags.put(attributsOfFile.ACCESRIGHTS.get(), isInClauseSelect);
+
+		return toInitFlags;
+	}
+
+	
+
+	/**
+	 * Méthode qui ajoute le path absolut aux élements d'un dossier.
+	 * @param  Element les éléments d'un dossier.
+	 * @param  Apath l'absolute path à ajouter à chaque élément du dossier.
+	 * @return Les elements du dossier avec le chemin absolut ajouté.
 	 */
 
 	private List<String> AddPathAbsolut(List<String> Elements , String Apath){
@@ -158,11 +151,5 @@ public class FindCommand extends OsTraitement {
 		}
 		return ResultLs;
 	}
-	/**
-	 * Execution total de la commande Stat
-	 */
-	public void ExecuteStatCommande() {
-		
-	}
-
+	
 }
