@@ -12,7 +12,7 @@ import org.apache.calcite.sql.SqlNodeList;
 import org.apache.calcite.sql.SqlOrderBy;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.parser.SqlParseException;
-import org.apache.calcite.sql.parser.SqlParser;
+
 
 
 public class querySelect extends query {
@@ -39,7 +39,7 @@ public class querySelect extends query {
 	private SqlSelect ParseSelectQuery() {
 
 		if (super.getQuery() == null || super.getQuery().length() == 0) {
-			System.err.println("Veuillez entrer un requette non vide");
+			System.err.println("Veuillez entrer une requette non vide");
 			return null;
 		}
 
@@ -206,11 +206,10 @@ public class querySelect extends query {
 			}
 			ArrayList<String> PointSupp = new ArrayList<String>();
 			for (int j = 0; j < tmp.size(); j++) {
-				if(tmp.get(j+1).equals(".")){
-					PointSupp.add(tmp.get(j)+tmp.get(j+1)+tmp.get(j+2));
-					j+=2;
-				}
-				PointSupp.add(tmp.get(j));
+				 if(tmp.get(j+1).equals(".")){
+			        	PointSupp.add(tmp.get(j)+tmp.get(j+1)+tmp.get(j+2));
+			        	j+=2;
+			        }
 			}
 			for(int i=0;i<PointSupp.size();i++) {
 				if(PointSupp.get(i).contains(".")) {

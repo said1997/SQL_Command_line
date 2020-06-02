@@ -86,8 +86,8 @@ public class TablesInMemory {
 	/* 
 	 * supprime les tables.
 	 * @param connect connection a la bdd
-	 *
-    private static void SupprimerTables(Connection conn,String nameTable) {
+	 */
+    public void SupprimerTables(Connection conn,String nameTable) {
         Statement statement = null;
         try {
             statement = conn.createStatement();
@@ -99,7 +99,7 @@ public class TablesInMemory {
         } catch (SQLException e) {
         }
 
-    }*/
+    }
 
 	/**
 	 * Creation de  la table Figure.
@@ -126,6 +126,7 @@ public class TablesInMemory {
 			query = query.substring(0, query.length() - 1);
 
 		query = query + " )";
+		//System.out.println(query);
 		Statement statement = conn.createStatement();
 		statement.execute(query);
 	}

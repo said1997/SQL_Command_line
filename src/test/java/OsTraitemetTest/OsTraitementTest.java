@@ -18,10 +18,10 @@ public class OsTraitementTest {
 	public void executeCommandLsTest() {
 		List<String> list = new ArrayList<String>();
 		
-		list=OsTraitement.executeCommand("ls src");
+		list=OsTraitement.DiskFileExplore("src");
 		assertEquals(2, list.size());
-		assertEquals("main", list.get(0));
-		assertEquals("test", list.get(1));
+		assertEquals("/home/said/Documents/Ter2/SQL_Command_line/src/test", list.get(0));
+		assertEquals("/home/said/Documents/Ter2/SQL_Command_line/src/main", list.get(1));
 		
 	}
 	

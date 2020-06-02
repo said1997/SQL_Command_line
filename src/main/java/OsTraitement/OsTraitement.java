@@ -39,25 +39,9 @@ public abstract class OsTraitement {
 	 * @param une commande Shell sous forme d'un string à éxecuter.
 	 * @return Le resultat de la commande.
 	 */
-	public static List<String> executeCommand(String command) {
-
-		List<String> getExecute = new ArrayList<String>();
-		Process p;
-		try {
-			p = Runtime.getRuntime().exec(command);
-			p.waitFor();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-			String line = "";			
-			while ((line = reader.readLine())!= null) {
-				getExecute.add(line);
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return getExecute;
+	public static List<String> DiskFileExplore(String command) {
+		DiskFileExplorer content = new DiskFileExplorer(command, false);
+		return content.list();
 	}
 
 	/**

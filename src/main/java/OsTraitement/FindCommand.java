@@ -96,8 +96,8 @@ public class FindCommand extends OsTraitement {
 	 */
 	public List<String> getListElementsOfFolder(String path) {
 		List <String> ResultLsCommand = new ArrayList<String>();
-		ResultLsCommand = super.executeCommand("ls -F "+path);
-		return AddPathAbsolut(ResultLsCommand,path);
+		ResultLsCommand = super.DiskFileExplore(path);
+		return ResultLsCommand;
 
 	}
 	
@@ -138,7 +138,7 @@ public class FindCommand extends OsTraitement {
 	 * @param  Element les éléments d'un dossier.
 	 * @param  Apath l'absolute path à ajouter à chaque élément du dossier.
 	 * @return Les elements du dossier avec le chemin absolut ajouté.
-	 */
+	 *
 
 	private List<String> AddPathAbsolut(List<String> Elements , String Apath){
 		List<String> ResultLs = new ArrayList<String>();
@@ -150,6 +150,6 @@ public class FindCommand extends OsTraitement {
 			 //ResultLs.add(Apath);
 		}
 		return ResultLs;
-	}
+	}*/
 	
 }
