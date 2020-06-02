@@ -175,53 +175,62 @@ public class querySelect extends query {
 		String transition = null;
 		String [] str;
 		ArrayList<String> tmp = new ArrayList<String>() ;
-		SqlSelect sel = getSelectNode();
-		SqlNode sqlnode = sel.getWhere();
-		String verifORAND = sqlnode.toString();
-		if(verifORAND.contains("OR")) {
-			tmp.add("OR");
-			this.queryResult.put("WHERE",tmp);
-			ExtractOrFromWhere();
-		}
-		else if(verifORAND.contains("AND")){
-			tmp.add("AND");
-			this.queryResult.put("WHERE",tmp);
-			ExtractAndFromWhere();
-		}
-		else {
-			//Select * FROM Bureau WHERE nom = test.txt 
-			transition = sqlnode.toString();
-			transition = transition.replace("(", "-");
-			transition = transition.replace(")", "-");
-			transition = transition.replace(",", "-");
-			transition = transition.replace("\n", "-");
-			transition = transition.replace("`", "-");
-			transition = transition.replace(" ", "-");
-			str =transition.split("-");
-			for(int i=0; i<str.length; i++) {
-				while(str[i].equals("")  && (i<str.length -1)){
-					i++;
-				}
-				tmp.add(str[i]);
+		 try {
+			SqlSelect sel = getSelectNode();
+			SqlNode sqlnode = sel.getWhere();
+			if(sqlnode != null) {
+			String verifORAND = sqlnode.toString();
+			if(verifORAND.contains("OR")) {
+				 tmp.add("OR");
+				this.queryResult.put("WHERE",tmp);
+				ExtractOrFromWhere();
 			}
-			ArrayList<String> PointSupp = new ArrayList<String>();
-			for (int j = 0; j < tmp.size(); j++) {
-				 if(tmp.get(j+1).equals(".")){
+			else if(verifORAND.contains("AND")){
+				tmp.add("AND");
+				this.queryResult.put("WHERE",tmp);
+				ExtractAndFromWhere();
+			}
+			else {
+				//Select * FROM Bureau WHERE nom = test.txt 
+				transition = sqlnode.toString();
+				transition = transition.replace("(", "-");
+				transition = transition.replace(")", "-");
+				transition = transition.replace(",", "-");
+				transition = transition.replace("\n", "-");
+				transition = transition.replace("`", "-");
+				transition = transition.replace(" ", "-");
+				str =transition.split("-");
+				for(int i=0; i<str.length; i++) {
+					while(str[i].equals("")  && (i<str.length -1)){
+						i++;
+					}
+					tmp.add(str[i]);
+				}
+				ArrayList<String> PointSupp = new ArrayList<String>();
+			    for (int j = 0; j < tmp.size(); j++) {
+			        if(tmp.get(j).equals(".")){
 			        	PointSupp.add(tmp.get(j)+tmp.get(j+1)+tmp.get(j+2));
 			        	j+=2;
 			        }
+			        PointSupp.add(tmp.get(j));
+			      }
+			    for(int i=0;i<PointSupp.size();i++) {
+			    	if(PointSupp.get(i).contains(".")) {
+			    		PointSupp.remove(i+1);
+			    	}
+			    }
+			    
+				if(PointSupp.get(PointSupp.size()-1).equals("-")) {
+					PointSupp.remove(PointSupp.get(PointSupp.size()-1));
+				}				
+				this.queryResult.put("WHERE", PointSupp);
 			}
-			for(int i=0;i<PointSupp.size();i++) {
-				if(PointSupp.get(i).contains(".")) {
-					PointSupp.remove(i+1);
-				}
 			}
-
-			if(PointSupp.get(PointSupp.size()-1).equals("-")) {
-				PointSupp.remove(PointSupp.get(PointSupp.size()-1));
-			}				
-			this.queryResult.put("WHERE", PointSupp);
-		}
+				} catch (SqlParseException e) {
+			e.printStackTrace();
+		 }
+		 
+	
 	}
 
 	/**

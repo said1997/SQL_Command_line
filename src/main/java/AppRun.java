@@ -6,6 +6,7 @@ import org.apache.calcite.sql.parser.SqlParseException;
 import CommandInterface.InterfaceCommand;
 import CommandInterface.SelectCommand;
 import CommandInterface.ShowCommand;
+import QueryTraitement.attributsOfFile;
 
 
 
@@ -43,6 +44,7 @@ public enum AppRun{
 	}
 
 	public static void main(String[] args) throws SqlParseException {
+		System.out.println(attributsOfFile.GUIDEUTILISATION.get());
 		AppRun.run();
 	}
 

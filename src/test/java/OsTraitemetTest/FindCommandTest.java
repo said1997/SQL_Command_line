@@ -2,14 +2,10 @@ package OsTraitemetTest;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.junit.Test;
-
 import OsTraitement.FindCommand;
-import OsTraitement.OsTraitement;
 import QueryTraitement.querySelect;
 
 
@@ -31,16 +27,13 @@ public class FindCommandTest {
 	@Test
 	public void addTraductionFromTest() {
 		querySelect queryselect=new querySelect("select creationtime,size from \"bin/pom.xml\",\"/home/said/Bureau/\",src ");
-		//List<String> listStat = new ArrayList<String>();
 		queryselect.ExtractClausesFrom();
 		queryselect.ExtractClausesSelect();
 		
 		Map<String, List<String>> result=queryselect.getQueryResult();
 		FindCommand cmd = new FindCommand(result);
 		cmd.AddFromTraduction();
-		//verifier le résultat si il est pas à nul
-		//System.out.println(cmd.getFolderAndContainers("bin/pom.xml"));
-		assertEquals("[src/main/, src/test/]",cmd.getFolderAndContainers("src").toString());
+		assertEquals("[/home/said/Documents/Ter2/SQL_Command_line/src/test, /home/said/Documents/Ter2/SQL_Command_line/src/main]",cmd.getFolderAndContainers("src").toString());
 	
 	
 	}

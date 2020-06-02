@@ -63,7 +63,7 @@ public class querySelectTest{
 	
 	@Test
 	public void ExtractClausesWhereTEST() throws SqlParseException {
-		String requete = "Select * FROM src WHERE size = 5000 ";
+		String requete = "Select * FROM src WHERE size > 5000 ";
 		Map<String,List<String>> MapTest = new HashMap<>();
 		List<String>ListTest = new ArrayList<String>();
 		ListTest.add("SIZE");

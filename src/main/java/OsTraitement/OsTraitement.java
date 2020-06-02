@@ -1,8 +1,6 @@
 package OsTraitement;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,11 +101,11 @@ public abstract class OsTraitement {
 	 * @param flagsAttributs une map qui indique pour chaque attribut du ficher s'il est contenu dans la clause select.
 	 * @return initStatCommand la commande stat construite à la quelle le chamin du fichier sur la quelle l'executer sera ajouter après.
 	 */
-	public String [] constructStatCommandSelect(Map<String,Boolean> flagsAttributs) {
-		//[0]stat [1]--format [2]"file name : %n, Type : %F, Size : %s, Access Rights : %A, Time Of last Access : %x, Time of last modif %y " [3]path
+	public String [] constructStatCommandSelect() {
+	
 		String [] initStatCommand = new String [3];
-		initStatCommand[0]=convertSelectAttributes(flagsAttributs);;
-		initStatCommand[1]=convertSelectAttributes(flagsAttributs);
+		initStatCommand[0]=convertSelectAttributes();;
+		initStatCommand[1]=convertSelectAttributes();
 		initStatCommand[2]="";
 		return initStatCommand;
 	}
@@ -128,7 +126,7 @@ public abstract class OsTraitement {
 	 * @param flagsAttributs les attributs selon les quels la commande stat sera construite.
 	 * @return argument Les attributs de la clause select traduit en shell.
 	 */
-	public  String convertSelectAttributes(Map<String,Boolean> flagsAttributs) {
+	public String convertSelectAttributes() {
 		//basic:size,lastModifiedTime,creationTime
 		String arguments = new String("basic:");
 		List<String> listSelectAttributs = new ArrayList<String>();

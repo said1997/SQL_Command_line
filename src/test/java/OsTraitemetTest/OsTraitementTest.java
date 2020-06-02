@@ -27,37 +27,14 @@ public class OsTraitementTest {
 	
 	@Test
 	public void executeCommandStatTest() {
-		/*List<String> listStat = new ArrayList<String>();
-		listStat=OsTraitement.executeCommand(OsTraitement.constructStatCommand());
-		String expected="file name : target, Type : répertoire, Size : 4096, Access Rights : drwxr-xr-x, "
-				+ "Time Of last Access : 2020-05-26 16:26:22.888745772 +0200, "
-				+ "Time of last modif 2020-05-26 16:26:22.848744971 +0200 ";
-		System.out.println(listStat);
-		assertEquals(1, listStat.size());
-		assertEquals(expected, listStat.get(0));*/
+		querySelect q = new querySelect("select CREATIONTIME, LASTACCESSTIME, LASTMODIFIEDTIME, PERMISSIONS from src");
+		q.ExtractClausesSelect();
+		OsTraitement testOsTraitemetn = new OsTraitement(q.getQueryResult()) {};
+		String expected="basic:creationTime,lastAccessTime,lastModifiedTime";
+		assertEquals(expected, testOsTraitemetn.convertSelectAttributes());
+		
 		
 	}
 	
-	/*@Test
-	public void getinitStatCommand() {
-		querySelect queryselect=new querySelect("select name,type,size,ACCESSRIGHTS from \"/home/said/Bureau/\" ");
-		List<String> listStat = new ArrayList<String>();
-		queryselect.ExtractClausesSelect();
-		queryselect.ExtractClausesFrom();
-		Map<String, List<String>> result=queryselect.getQueryResult();
-		FindCommand cmd = new FindCommand(result);
-		String [] tab = cmd.addSelectTraduction();
-		//listStat=OsTraitement.executeCommand(cmd.addSelectTraduction());
-		cmd.AddFromTraduction();
-		for(String s : result.get("FROM")) {
-			for(String c : cmd.getFolderAndContainers(s)) {
-				System.out.println("--->Pour : "+c);
-				for(String d : OsTraitement.executeCommand(cmd.constructStatCommandFrom(tab,c))) {
-					System.out.println(d);
-				}
-				
-			}
-		}
 
-	}*/
 }

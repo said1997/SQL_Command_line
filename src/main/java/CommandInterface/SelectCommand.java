@@ -27,18 +27,17 @@ public class SelectCommand implements InterfaceCommand {
 		querySelect queryselect=new querySelect(this.Command);
 		queryselect.ExtractClausesSelect();
 		queryselect.ExtractClausesFrom();
-		/*try {
+		try {
 			queryselect.ExtractClausesWhere();
-		} catch (SqlParseException e) {
-			e.printStackTrace();
-		}catch (NullPointerException e1) {
-			e1.printStackTrace();}*/
+		} catch (SqlParseException e) {e.printStackTrace();}
+		catch (NullPointerException e1) {e1.printStackTrace();}
 		Map<String, List<String>> result=queryselect.getQueryResult();
 		//Création de la Structure en mémoire ainsi que la création du header de la table à afficher
 		for(String tableName : result.get("FROM") ) {
-			ExecuteWithoutFiltration(result, tableName);
-			if(result.get("FROM").size()<2)
+			if(result.get("FROM").size()<2 && result.containsKey("WHERE"))
 			ExecuteWithFiltration(result, tableName);
+			else
+				ExecuteWithoutFiltration(result, tableName);
 		}
 
 	}

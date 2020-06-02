@@ -62,7 +62,7 @@ public class FindCommand extends OsTraitement {
 					}
 				}
 			}
-			return super.constructStatCommandSelect(flagAttribut);
+			return super.constructStatCommandSelect();
 		}
 		System.err.println("Pas de clause Select");
 		return null;
