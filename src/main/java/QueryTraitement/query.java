@@ -44,7 +44,7 @@ public abstract class query {
 	 */
 	protected SqlNode parseQuery() {
 		try { 
-			return this.parser.parseQuery();
+			return getParser().parseQuery();
 		}
 		catch (Exception e) {
 			System.err.println("Erreur dans la syntaxe de la requette");

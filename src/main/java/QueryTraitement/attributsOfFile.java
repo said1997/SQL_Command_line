@@ -19,6 +19,7 @@ public enum attributsOfFile {
 			+ "-Pour filtrer par date veuillez respécter la notation suivante 'yyyy-mm-dd hh:mm:ss'.\n"
 			+ "Exemple Select path,permissions,size,creationTime from \"/home/user/Bureau\" where creationtime > '2020-05-01 00:00:00' and size > 5000\n"
 			+ "-Attributs de fichier : type,path,size,creationTime,lastAccessTime,lastModificationTime,permissions (pas d'importance pour les majuscules et minuscules).\n"
+			+ "Pour quitter l'application tapez exit.\n"
 			+ "-C'est à vous !\n");
 	
 	private String attribut;
