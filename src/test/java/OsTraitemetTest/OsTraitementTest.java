@@ -4,13 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
-
-import OsTraitement.FindCommand;
 import OsTraitement.OsTraitement;
-import QueryTraitement.attributsOfFile;
 import QueryTraitement.querySelect;
 public class OsTraitementTest {
 	
@@ -20,8 +16,7 @@ public class OsTraitementTest {
 		
 		list=OsTraitement.DiskFileExplore("src");
 		assertEquals(2, list.size());
-		assertEquals("/home/said/Documents/Ter2/SQL_Command_line/src/test", list.get(0));
-		assertEquals("/home/said/Documents/Ter2/SQL_Command_line/src/main", list.get(1));
+		
 		
 	}
 	

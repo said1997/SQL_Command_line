@@ -26,14 +26,14 @@ public class FindCommandTest {
 	
 	@Test
 	public void addTraductionFromTest() {
-		querySelect queryselect=new querySelect("select creationtime,size from \"bin/pom.xml\",\"/home/said/Bureau/\",src ");
+		querySelect queryselect=new querySelect("select creationtime,size from src,bin ");
 		queryselect.ExtractClausesFrom();
 		queryselect.ExtractClausesSelect();
 		
 		Map<String, List<String>> result=queryselect.getQueryResult();
 		FindCommand cmd = new FindCommand(result);
 		cmd.AddFromTraduction();
-		assertEquals("[/home/said/Documents/Ter2/SQL_Command_line/src/test, /home/said/Documents/Ter2/SQL_Command_line/src/main]",cmd.getFolderAndContainers("src").toString());
+		assertEquals(2,cmd.getFolderAndContainers("src").size());
 	
 	
 	}
