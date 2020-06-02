@@ -28,20 +28,27 @@ public class TablesInMemory {
 
 	/**
 	 * Creation de la structure.
+	 * @throws ClassNotFoundException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
 	 * @throws SQLException en cas d'erreur de creation
 	 */
-	public TablesInMemory()  {
+	public TablesInMemory() throws ClassNotFoundException  {
 
 		try {
 			setNomStruct("StructTable");
+			Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
 			connection = DriverManager.getConnection("jdbc:derby:memory:"+getNomStruct()+";create=true");
 
 		} catch (SQLException e) {
-			System.err.println("Impossible de Créer la Table représentant un dossier et ses attributs en mémoire \n"
-					+ "du à un arrêt brutal de l'application (sans commande exit)\n");
+			System.err.println("Impossible de Créer la Table représentant un dossier et ses attributs en mémoire \n");
 			System.err.println("Veuillez relancer l'application");
 			e.printStackTrace();
 			System.exit(0);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
 	}
 

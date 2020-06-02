@@ -81,12 +81,21 @@ public class SelectCommand implements InterfaceCommand {
 	 * @throws SQLException 
 	 */
 	void ExecuteWithFiltration(Map<String,List<String>> result,String tableName) {
-		TablesInMemory table = new TablesInMemory();
-		FindCommand cmd = new FindCommand(result);
-		cmd.AddFromTraduction();
-		RemplirStructureInMeory(table, tableName, result, cmd);
-		getResultOfFiltration(table, result);
-		table.SupprimerTables(table.Connect(),tableName);
+			
+		TablesInMemory table;
+		try {
+			table = new TablesInMemory();
+			FindCommand cmd = new FindCommand(result);
+			cmd.AddFromTraduction();
+			RemplirStructureInMeory(table, tableName, result, cmd);
+			getResultOfFiltration(table, result);
+			table.SupprimerTables(table.Connect(),tableName);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+			
+		
+		
 	}
 	
 	/**
