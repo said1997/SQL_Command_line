@@ -172,10 +172,10 @@ Ce projet aboutis à son terme, et nous nous sommes beaucoup professionnalisé a
 
 #### Génération de la javaDoc
 
-+ Placez vous dans le dossier SQL_Command_line/
++ Placez-vous dans le dossier SQL_Command_line/
 
 + Tapez dans le terminal sudo mvn site
-+ Puis placez vous dans le dossier /target/site/apidocs en tapant cd /target/site/apidocs
++ Puis placez-vous dans le dossier /target/site/apidocs en tapant cd /target/site/apidocs
 
 + Ouvrez avec un navigateur le fichier index.html en tapant : firefox index.html
 
