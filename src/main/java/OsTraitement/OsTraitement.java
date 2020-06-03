@@ -8,11 +8,15 @@ import java.util.Map;
 import java.nio.file.*;
 
 import QueryTraitement.attributsOfFile;
-
+/**
+ * Classe qui se charge de récupérer tout les attributs souhaités d'un fichier sur le disque.
+ * @author UVSQTer
+ *
+ */
 public abstract class OsTraitement {
 
 	/**
-	 * La mape qui contient la requete parsée Comme clé la clause et le contenu est la liste de ses éléments.
+	 * La Map qui contient la requete parsée Comme clé la clause et le contenu est la liste de ses éléments.
 	 */
 	protected Map<String,List<String>> queryToOs;
 
@@ -24,7 +28,8 @@ public abstract class OsTraitement {
 
 	/**
 	 * Constructeur de La classe OsTraitement
-	 * @param toTraduct un mape qui contien comme clé la clause de la requette et la liste de ses attributs qui seront traduis en une commande shell.
+	 * @param toTraduct un mape qui contien comme clé la clause de la requette et la liste de ses attributs qui seront 
+	 * traduits en méthode getAttribute à executer.
 	 */
 	public OsTraitement(Map<String,List<String>> toTraduct) {
 		this.queryToOs = new HashMap<String,List<String>>();	
@@ -33,27 +38,27 @@ public abstract class OsTraitement {
 	}
 
 	/**
-	 * Prend une commende Shell en paramètre et l'éxecute
-	 * @param une commande Shell sous forme d'un string à éxecuter.
-	 * @return Le resultat de la commande.
+	 * Lister le contenu d'un dosier.
+	 * @param path le chemin du dossier à lister.
+	 * @return list Le resultat de la recherche sous forme d'une liste.
 	 */
-	public static List<String> DiskFileExplore(String command) {
-		DiskFileExplorer content = new DiskFileExplorer(command, false);
+	public static List<String> DiskFileExplore(String path) {
+		DiskFileExplorer content = new DiskFileExplorer(path, false);
 		return content.list();
 	}
 
 	/**
-	 * Prend une commende Shell sous forme d'un tableau en paramètre à executer.
-	 * Le tableau permet de construir la commende stat selon les attributs entrés par l'utilisateur.
-	 * @param une commande Shell à éxecuter sous forme d'un tableau.
-	 * @return Le resultat de la commande sous forme d'une liste String.
+	 * Prend des attributs préparés sous forme d'un tableau en paramètre à executer.
+	 * Le tableau permet d'obtenir les informations sur un fichier selon les attributs entrés par l'utilisateur.
+	 * @param prepare les attributs préparés à éxecuter sous forme d'un tableau.
+	 * @return attribs Le resultat de la recherche sous forme d'une Map<attribut,contenu>.
 	 */
-	public  Map<String,Object> executeCommand(String [] command) {
+	public  Map<String,Object> execute(String [] prepare) {
 
-		Path path = Paths.get(command[2]);
+		Path path = Paths.get(prepare[2]);
 		try {
 			
-			Map<String,Object> exec = Files.readAttributes(path, command[0]);
+			Map<String,Object> exec = Files.readAttributes(path, prepare[0]);
 			Map<String, Object> attribs = new HashMap<>(exec);
 			if(isInSelect(attributsOfFile.DATE.get())) {
 				attribs.put(attributsOfFile.DATE.get(),reOraniseDate(attribs.get("creationTime")));
@@ -66,7 +71,7 @@ public abstract class OsTraitement {
 			}
 			
 			if(isInSelect(attributsOfFile.NAME.get())) {
-				Path p = Paths.get(command[2]);
+				Path p = Paths.get(prepare[2]);
 				Path fileName = p.getFileName();
 				attribs.put(attributsOfFile.NAME.get(),fileName.toString());
 			}
@@ -75,7 +80,7 @@ public abstract class OsTraitement {
 				attribs.put(attributsOfFile.SIZE.get(),attribs.get("size"));
 			}
 			if(isInSelect(attributsOfFile.PATH.get()))
-				attribs.put(attributsOfFile.PATH.get(), (Object)command[2]);
+				attribs.put(attributsOfFile.PATH.get(), (Object)prepare[2]);
 			if(isInSelect(attributsOfFile.TYPE.get())) {
 				if((boolean) attribs.get("isDirectory")) { 
 					attribs.put(attributsOfFile.TYPE.get(), "Directory");
@@ -103,11 +108,10 @@ public abstract class OsTraitement {
 	}
 
 	/**
-	 * Construction de la commande Stat selon les attribut contenus dans la clause Select
-	 * @param flagsAttributs une map qui indique pour chaque attribut du ficher s'il est contenu dans la clause select.
-	 * @return initStatCommand la commande stat construite à la quelle le chamin du fichier sur la quelle l'executer sera ajouter après.
+	 * Construction des attributs pour la méthode readAttributs() selon les attribut contenus dans la clause Select.
+	 * @return initStatCommand les attributs préparés à la quelle le chemin du fichier sur la quelle l'executer sera ajouter après.
 	 */
-	public String [] constructStatCommandSelect() {
+	public String [] getAttributeMethodeforSelectClause() {
 	
 		String [] initStatCommand = new String [3];
 		initStatCommand[0]=convertSelectAttributes();
@@ -117,10 +121,10 @@ public abstract class OsTraitement {
 	}
 
 	/**
-	 * Construction de la commande Stat pour un chemin de fichier ou dossier donné.
-	 * @param AttributSelect Contient la commande stat construite à partir de la clause select.
-	 * @param path Le chemin sur le quel executer la commande Stat.
-	 * @return AttributSelect le tableau qui contient la commande stat totalement construite à executer.
+	 * Construction des attributs pour la méthode readAttributs() pour un chemin de fichier ou dossier donné.
+	 * @param AttributSelect Contient les attributs pour la méthode readAttributs() construit à partir de la clause select.
+	 * @param path Le chemin sur le quel executer la méthode readAttributs().
+	 * @return AttributSelect le tableau qui contient les attributs pour la méthode readAttributs() totalement construit à executer.
 	 */
 	public String [] constructStatCommandFrom(String [] AttributSelect, String path) {
 		AttributSelect[2]=path;
@@ -128,9 +132,8 @@ public abstract class OsTraitement {
 	}
 
 	/**
-	 * Prend les attributs présent dans la clause Select et les transforme en commande Shell.
-	 * @param flagsAttributs les attributs selon les quels la commande stat sera construite.
-	 * @return argument Les attributs de la clause select traduit en shell.
+	 * Prend les attributs présent dans la clause Select et les transforme en attributs pour la méthode readAttributs().
+	 * @return argument Les attributs de la clause select traduit en attributs de la méthode readAttributs().
 	 */
 	public String convertSelectAttributes() {
 		//basic:size,lastModifiedTime,creationTime
@@ -155,7 +158,7 @@ public abstract class OsTraitement {
 
 	/**
 	 * Get le folder et ses Containers chaque attribut de la clause from est un dossier qui a un contenu de fichier et dossiers.
-	 * @return FolderAndContainers une mape qui a pour clé le dossier et contenu la liste des ses élements.
+	 * @return FolderAndContainers une Map qui a pour clé le dossier et contenu la liste des ses élements.
 	 */
 	public Map<String,List<String>> getFolderAndContainers(){
 		return this.FolderAndContiners;
@@ -182,7 +185,8 @@ public abstract class OsTraitement {
 	}
 
 	/**
-	 * Retourne la structure contenant les clauses et les attributs
+	 * Retourne la structure contenant les clauses et les attributs.
+	 * @return queryToos Map<Clause,attributs>.
 	 */
 	public Map<String, List<String>> getQuerytoOs(){
 		return this.queryToOs;
@@ -190,7 +194,8 @@ public abstract class OsTraitement {
 
 	/**
 	 * Verifier si un attribut est dans clause Select
-	 * Boolean si l'attribut existe.
+	 * @return true Boolean si l'attribut existe.
+	 * @return false Boolean si l'attribut n'existe pas.
 	 */
 	public Boolean isInSelect(String attribut){
 		for(String attr : getQuerytoOs().get("SELECT")) {
@@ -202,7 +207,10 @@ public abstract class OsTraitement {
 
 
 	/**
-	 * Mettre les permission comme l'affichage dans le terminal
+	 * Avoir les permissions d'un fichier et les représenter comme un affichage dans le terminal.
+	 * @param path chemin du fichier.
+	 * @param type Type du fichier.
+	 * @return s Permissions sous la forme -rwx-wxr-x
 	 */
 	private String Permessions(Path path,String type) {
 		try {
@@ -264,6 +272,7 @@ public abstract class OsTraitement {
 
 	/**
 	 * Réorganisation de le date sous format YYYY-MM-DD hh-mm-ss
+	 * @return s la date sous le format YYYY-MM-DD hh-mm-ss 
 	 */
 	private String reOraniseDate(Object object) {
 		if(object.toString().contains(".")) {

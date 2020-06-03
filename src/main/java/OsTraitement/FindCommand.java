@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import QueryTraitement.attributsOfFile;
-
+/**
+ * Classe qui se charge de charger les fichier d'un dossier.
+ * @author root
+ *
+ */
 public class FindCommand extends OsTraitement {
-	
+
 	/**
 	 * Constructeur de la classe OsTraitement
 	 * @param toTraduct map qui contient comme clé Une clause et la liste des ses attributs.
@@ -19,9 +23,10 @@ public class FindCommand extends OsTraitement {
 
 
 	/**
-	 * Traduction de la clause select en commande OS.
+	 * Traduction de la clause select en paramètres à passer à la méthode getAttribute().
 	 * Pour chaque attribut présent dans la clause select on met son flag à true.
-	 * @return Un tableau contenant la construction de la commende Shelle à qui le chemin du dossier sur la quel l'ecuter sera donné après.
+	 * @return tab[] Un tableau contenant la construction des paramètres de la méthode getAttribute() 
+	 * à qui le chemin du fichier sur la quel l'executer sera donné après.
 	 */
 	public String[] addSelectTraduction() {
 
@@ -65,17 +70,16 @@ public class FindCommand extends OsTraitement {
 					}
 				}
 			}
-			return super.constructStatCommandSelect();
+			return super.getAttributeMethodeforSelectClause();
 		}
 		System.err.println("Pas de clause Select");
 		return null;
 	}
-	
+
 
 	/**
-	 * Traduction de la clause From language OS.
+	 * Traduction de la clause From en getAttribute pour l'OS.
 	 * Chaque attribut de from est un dossier.
-	 * @return paths la liste des clauses from
 	 */
 	public void AddFromTraduction(){
 		List<String> paths = new ArrayList<String>();
@@ -91,10 +95,10 @@ public class FindCommand extends OsTraitement {
 			}
 		}
 	}
-	
+
 	/**
 	 * Obtenir tout les élément d'un dossier.
-	 * @param le chemin d'un dossier.
+	 * @param path le chemin d'un dossier.
 	 * @return List les élément d'un dossier
 	 */
 	public List<String> getListElementsOfFolder(String path) {
@@ -103,10 +107,10 @@ public class FindCommand extends OsTraitement {
 		return ResultLsCommand;
 
 	}
-	
+
 	/**
-	 * Mettre un attribut de la clause select en true c'est à dire qu'il sera ajouté à la construction de la commande Stat à executer.
-	 * @param toSet la mao qui contient comme clé lattribut de la clause select et comme valeur l'état de de lattribut si il est présent ou non.
+	 * Mettre un attribut de la clause select en true c'est à dire qu'il sera ajouté à la construction du paramètre que getAttribute() va prendre.
+	 * @param toSet la map qui contient comme clé lattribut de la clause select et comme valeur l'état de de lattribut si il est présent ou non.
 	 * @param Key lattribut qui sera activé.
 	 * @return toSet la map après avoir définit le statut de son attribut.
 	 */
@@ -135,25 +139,4 @@ public class FindCommand extends OsTraitement {
 		return toInitFlags;
 	}
 
-	
-
-	/**
-	 * Méthode qui ajoute le path absolut aux élements d'un dossier.
-	 * @param  Element les éléments d'un dossier.
-	 * @param  Apath l'absolute path à ajouter à chaque élément du dossier.
-	 * @return Les elements du dossier avec le chemin absolut ajouté.
-	 *
-
-	private List<String> AddPathAbsolut(List<String> Elements , String Apath){
-		List<String> ResultLs = new ArrayList<String>();
-		
-		for(String Ap : Elements) {
-			//if(Ap.endsWith("/"))
-			ResultLs.add(Apath+"/"+Ap);
-			//else
-			 //ResultLs.add(Apath);
-		}
-		return ResultLs;
-	}*/
-	
 }

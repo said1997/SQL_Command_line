@@ -13,7 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 import QueryTraitement.attributsOfFile;
-
+/**
+ * Classe qui permet de créer la structure en mémoire en cas de besoin pour la filtration.
+ * @author UVSQTer
+ *
+ */
 
 public class TablesInMemory {
 
@@ -53,10 +57,9 @@ public class TablesInMemory {
 	}
 
 	/**
-	 * Se connecter a la Structure.
-	 * @return connection a la Structure
+	 * Se connecter à la Structure.
+	 * @return connection connection à la Structure
 	 */
-
 	public  Connection Connect() {
 		try {
 			return DriverManager.getConnection("jdbc:derby:memory:"+getNomStruct()+";create=false");
@@ -66,7 +69,7 @@ public class TablesInMemory {
 		return null;
 	}
 	/**
-	 * Fermer la connexion
+	 * Fermer la connexion à structure.
 	 * @throws SQLException 
 	 */
 	public void CloseConnexion() throws SQLException {
@@ -74,7 +77,7 @@ public class TablesInMemory {
 	}
 	/**
 	 * Retourner le nom qui identifie la structure en mémoire
-	 * @return nom de la structure
+	 * @return StructInMemory nom de la structure
 	 * @throws SQLException
 	 */
 	public  String getNomStruct() throws SQLException {
@@ -83,35 +86,38 @@ public class TablesInMemory {
 
 	/**
 	 * Donner un nom à la structure à créer en mémoire.
-	 * @param name nom
+	 * @param name nom de la structure
 	 */
 	public  void setNomStruct(String name) {
 		StructInMemory = name + "";
 	}
 
 
-	/* 
-	 * supprime les tables.
-	 * @param connect connection a la bdd
+	/**
+	 * supprimer les tables.
+	 * @param conn connection à la structure.
+	 * @param nameTable nom de la table à supprimer.
 	 */
-    public void SupprimerTables(Connection conn,String nameTable) {
-        Statement statement = null;
-        try {
-            statement = conn.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            statement.execute("drop table " +nameTable.replace("/", ""));
-        } catch (SQLException e) {
-        }
+	public void SupprimerTables(Connection conn,String nameTable) {
+		Statement statement = null;
+		try {
+			statement = conn.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			statement.execute("drop table " +nameTable.replace("/", ""));
+		} catch (SQLException e) {
+		}
 
-    }
+	}
 
 	/**
-	 * Creation de  la table Figure.
-	 * @param connection connexion a la BDD
-	 * @throws SQLException en cas d'erreur de creation
+	 * Création de  la table qui à comme attributs les attributs entrés par l'utilisataur dans la clause select.
+	 * @param conn connexion à la structure.
+	 * @param NameTable nom de la table
+	 * @param attribut liste des attributs de la table
+	 * @throws SQLException en cas d'erreur de création
 	 */
 	public void CreateTable(Connection conn, String NameTable, List<String> attribut)throws SQLException {
 		Map<String, String > map = new HashMap<String, String>();
@@ -140,10 +146,13 @@ public class TablesInMemory {
 	}
 
 	/**
-	 * Ajout d'un ligne à une TableEnMémoire
+	 * Ajout d'un ligne à une TableEnMémoire.
+	 * @param conn connexion à la structure.
+	 * @param Table nom de la table.
+	 * @param line ligne à insérer.
+	 * @param attribut liste des attributs à insérer.
 	 * @throws SQLException 
 	 */
-
 	public void AddLineToTable(Connection conn,String Table, Map<String,Object> line , List<String> attribut) {
 
 		String attr="";
@@ -181,9 +190,9 @@ public class TablesInMemory {
 					Long size = (Long) line.get(key);
 					prepare.setInt(n, size.intValue());
 				}
-				 
+
 				else {
-						prepare.setString(n, (String)line.get(key));
+					prepare.setString(n, (String)line.get(key));
 				}
 				n++;
 			}

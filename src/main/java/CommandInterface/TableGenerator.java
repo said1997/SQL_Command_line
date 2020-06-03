@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Classe qui permet de dessiner une table
+ * @author Stack.
+ *
+ */
 
 public class TableGenerator {
 

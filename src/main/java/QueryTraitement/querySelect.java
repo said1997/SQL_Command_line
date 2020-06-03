@@ -13,7 +13,11 @@ import org.apache.calcite.sql.SqlOrderBy;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.parser.SqlParseException;
 
-
+/**
+ * Classe qui s'occupe de parser une requette de type select.
+ * @author UVSQTer
+ *
+ */
 
 public class querySelect extends query {
 
@@ -25,6 +29,7 @@ public class querySelect extends query {
 	/**
 	 * Le constructeur de la classe querySelect.
 	 * Exctraire le attributs de la clause Select et les mettre dans queryResult
+	 * @param query la requette à traiter.
 	 */
 	public querySelect(final String query) {
 		super(query);
@@ -58,7 +63,7 @@ public class querySelect extends query {
 	}
 	/**
 	 * Extraire les attributs de la clause Select et les mettre dans queryResult.
-	 * La clé des la map queryResult est le nom de la Clause est la valeur sont les attributs de la clause.
+	 * La clé de la Map queryResult est le nom de la Clause et la valeur sont les attributs de la clause.
 	 */
 	public void ExtractClausesSelect() {
 
@@ -108,7 +113,7 @@ public class querySelect extends query {
 
 	/**
 	 * Exctraire le attributs de la clause From et les mettre dans queryResult.
-	 * La clé des la map queryResult est le nom de la Clause est la valeur sont les attributs de la clause.
+	 * La clé de la Map queryResult est le nom de la Clause et la valeur sont les attributs de la clause.
 	 */
 	public void ExtractClausesFrom() {
 		if (getSelectNode() != null) {
@@ -137,10 +142,10 @@ public class querySelect extends query {
 
 	/**
 	 * Extraire de manière récursive les attributs de la clase from.
-	 * Si la clause contient des alias AS seleument le vrai nom de la table sera extrait
-	 * @param join le noeud de type SqlJoin de la clause from
+	 * Si la clause contient des alias AS seleument le vrai nom de la table sera extrait.
+	 * @param join le noeud de type SqlJoin de la clause from.
 	 * @param tables liste des attributs du noeud from.
-	 * @return la liste des attribut de clause from
+	 * @return la liste des attribut de clause from.
 	 */
 	public List<String> RecurisiveClausesFrom (SqlJoin join,List<String> tables)
 	{
@@ -169,7 +174,7 @@ public class querySelect extends query {
 	
 	/**
 	 * Exctraire le attributs de la clause Where et les mettre dans queryResult
-	 * Types d'attributs de la clause where (type,name,size,contenent,extention, )
+	 * Types d'attributs de la clause where
 	 * @throws SqlParseException 
 	 */
 	public void ExtractClausesWhere() throws SqlParseException {
@@ -260,15 +265,16 @@ public class querySelect extends query {
 	}
 
 	/**
-	 * retourner le Noeud Select
-	 * @return Le noeud Select de cette classe
+	 * retourner le Noeud Select.
+	 * @return SelectNode Le noeud Select de cette classe.
 	 */
 	public SqlSelect getSelectNode () {
 		return this.SelectNode;
 	}
 
-	/*
+	/**
 	 * Gestion generique des de la persence des AND et OR dans un WHERE
+	 * @param and_ou_or .
 	 */
 	public void operationOR_AND(String and_ou_or) {
 		ArrayList<String> tmp = new ArrayList<String>() ;
@@ -309,47 +315,47 @@ public class querySelect extends query {
 	/**
 	 * Extraire les alias de de clause from si elle contiant des alias.
 	 * @param node le noeud de la clause from
-	 * @return
+	 * @return list une liste qui cintient les alias 
 	 */
 	public List<String> extrairesWithAliasFrom(SqlNode node) {
-		final List<String> tables = new ArrayList<>();
+		final List<String> list = new ArrayList<>();
 
 		if (node == null) {
-			return tables;
+			return list;
 		}
 		// si ya qu'une seule close.
 		if (node.getKind().equals(SqlKind.AS)) {
-			tables.add(((SqlBasicCall) node).operand(1).toString());
-			return tables;
+			list.add(((SqlBasicCall) node).operand(1).toString());
+			return list;
 		}
 		// si on a plus d'une seule clause.
 		if (node.getKind().equals(SqlKind.JOIN)) {
 			final SqlJoin from = (SqlJoin) node;
 			// si on a le alias i.e:AS je prends l'alias.
 			if (from.getLeft().getKind().equals(SqlKind.AS)) {
-				tables.add(((SqlBasicCall) from.getLeft()).operand(1).toString());
+				list.add(((SqlBasicCall) from.getLeft()).operand(1).toString());
 			} else {
 				// Si on a plus de 2 alias dans la requette query.
 				if (from.getLeft() instanceof SqlJoin) {
 					SqlJoin left = (SqlJoin) from.getLeft();
 
 					while (!left.getLeft().getKind().equals(SqlKind.AS)) {
-						tables.add(((SqlBasicCall) left.getRight()).operand(1).toString());
+						list.add(((SqlBasicCall) left.getRight()).operand(1).toString());
 						left = (SqlJoin) left.getLeft();
 					}
-					tables.add(((SqlBasicCall) left.getLeft()).operand(1).toString());
-					tables.add(((SqlBasicCall) left.getRight()).operand(1).toString());
+					list.add(((SqlBasicCall) left.getLeft()).operand(1).toString());
+					list.add(((SqlBasicCall) left.getRight()).operand(1).toString());
 				}
 			}
 			try {
-				tables.add(((SqlBasicCall) from.getRight()).operand(1).toString());
-				return tables;
+				list.add(((SqlBasicCall) from.getRight()).operand(1).toString());
+				return list;
 			} catch (ClassCastException e) {
 
 			}
 
 		}
 
-		return tables;
+		return list;
 	}
 }

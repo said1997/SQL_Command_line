@@ -13,18 +13,29 @@ import org.apache.calcite.sql.parser.SqlParseException;
 import OsTraitement.FindCommand;
 import QueryTraitement.querySelect;
 import StructureInMemory.TablesInMemory;
-
+/**
+ * Classe pour le traitement d'une requette du début à l'affichage.
+ * @author root
+ *
+ */
 public class SelectCommand implements InterfaceCommand {
-
-	private String Command;
-
+	/**
+	 * la requete à traiter.
+	 */
+	private String query;
+	/**
+	 * Constructeur de la classe.
+	 * @param query la requete à traiter.
+	 */
 	public SelectCommand(String query) {
-		this.Command=query;
+		this.query=query;
 	}
-
+	/**
+	 * Traitement de la requette.
+	 */
 	@Override
 	public void execute() {
-		querySelect queryselect=new querySelect(this.Command);
+		querySelect queryselect=new querySelect(this.query);
 		queryselect.ExtractClausesSelect();
 		queryselect.ExtractClausesFrom();
 		try {
@@ -44,8 +55,10 @@ public class SelectCommand implements InterfaceCommand {
 
 	/**
 	 * Executer le requette de l'utilisateur sans l'aide de la structure mémoire
+	 * @param result Map qui contient le resultat du la requete après le traitement.
+	 * @param path le chemin extrait de la clause from.
 	 */
-	void ExecuteWithoutFiltration(Map<String,List<String>> result,String tableName) {
+	void ExecuteWithoutFiltration(Map<String,List<String>> result,String path) {
 
 		FindCommand cmd = new FindCommand(result);
 		String [] getAttrinutePrepare = cmd.addSelectTraduction();
@@ -63,8 +76,8 @@ public class SelectCommand implements InterfaceCommand {
 		}
 
 		List<List<String>> rowsList = new ArrayList<>();
-		for(String c : cmd.getFolderAndContainers(tableName)) {
-			Map<String,Object> line = cmd.executeCommand(cmd.constructStatCommandFrom(getAttrinutePrepare,c));
+		for(String c : cmd.getFolderAndContainers(path)) {
+			Map<String,Object> line = cmd.execute(cmd.constructStatCommandFrom(getAttrinutePrepare,c));
 			List<String> row = new ArrayList<>();
 			if (line != null) {	
 				for (String colContnent : result.get("SELECT")) {
@@ -73,12 +86,14 @@ public class SelectCommand implements InterfaceCommand {
 				rowsList.add(row);
 			}
 		}
-		System.out.print("\n"+tableName+"/");
+		System.out.print("\n"+path+"/");
 		System.out.print(tableGenerator.generateTable(headersList, rowsList)); 
 	}
 
 	/**
-	 * Executer le requette de l'utilisateur avec l'aide de la structure mémoire pour la filtration
+	 * Executer le requette de l'utilisateur avec l'aide de la structure mémoire pour la filtration.
+	 * @param result Map qui contient le resultat du la requete après le traitement.
+	 * @param tableName le chemin extrait de la clause from.
 	 * @throws SQLException 
 	 */
 	void ExecuteWithFiltration(Map<String,List<String>> result,String tableName) {
@@ -102,7 +117,7 @@ public class SelectCommand implements InterfaceCommand {
 	/**
 	 * Remplissage de la structure mémoire
 	 */
-	void RemplirStructureInMeory(TablesInMemory table,String tableName, Map<String,List<String>> result, FindCommand cmd) {
+	private void RemplirStructureInMeory(TablesInMemory table,String tableName, Map<String,List<String>> result, FindCommand cmd) {
 		String [] getAttrinutePrepare = cmd.addSelectTraduction();
 		try {
 			table.CreateTable(table.Connect(), tableName, result.get("SELECT"));
@@ -112,18 +127,18 @@ public class SelectCommand implements InterfaceCommand {
 		}
 
 		for(String c : cmd.getFolderAndContainers(tableName)) {
-			Map<String,Object> line = cmd.executeCommand(cmd.constructStatCommandFrom(getAttrinutePrepare,c));
+			Map<String,Object> line = cmd.execute(cmd.constructStatCommandFrom(getAttrinutePrepare,c));
 			if (line != null) {	
 				table.AddLineToTable(table.Connect(), tableName, line, result.get("SELECT"));
 			}
 		}
 		System.out.print("\n"+tableName+"/");
 	}
+	
 	/**
 	 * Affichage du résultat de la filtration à l'aide de la structure mémoire
 	 */
-	
-	void getResultOfFiltration(TablesInMemory table, Map<String,List<String>> result) {
+	private void getResultOfFiltration(TablesInMemory table, Map<String,List<String>> result) {
 		TableGenerator tableGenerator = new TableGenerator();
 		List<String> headersList = new ArrayList<>(); 
 		try {
@@ -133,7 +148,7 @@ public class SelectCommand implements InterfaceCommand {
 			List<List<String>> rowsList = new ArrayList<>();
 			Statement statement = table.Connect().createStatement();
 			ResultSet res;
-			String chargingFromTable = this.Command.replace("\"", ""); 
+			String chargingFromTable = this.query.replace("\"", ""); 
 			System.out.println("(Le résultat de la filtration à l'aide de la structure mémoire) :");
 			res = statement.executeQuery(chargingFromTable.replace("/", ""));
 			while (res.next()) {

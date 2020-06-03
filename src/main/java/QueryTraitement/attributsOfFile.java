@@ -1,5 +1,9 @@
 package QueryTraitement;
-
+/**
+ * Class Enum contenant les attributs d'un fichier ou dossier et le manuel d'utilisation.
+ * @author UVSQTer.
+ *
+ */
 public enum attributsOfFile {
 	/**
 	 * Les attributs de la table fichier
@@ -28,7 +32,10 @@ public enum attributsOfFile {
 	private attributsOfFile(String A) {
 		this.attribut=A;
 	}
-	
+	/**
+	 * Retourne l'énumération.
+	 * @return attribut l'énumération.
+	 */
 	public String get() {
 		return this.attribut;
 	}

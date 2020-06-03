@@ -30,6 +30,7 @@ public abstract class query {
 	
 	/**
 	 * Constructeur de cette classe
+	 * @param query la requette à parser.
 	 */
 	public query(final String query) {
 		
@@ -40,7 +41,7 @@ public abstract class query {
 	
 	/**
 	 * Parser la requette query.
-	 * @return un SqlNode le premier noeud de la requette.
+	 * @return SqlNode un SqlNode le premier noeud de la requette.
 	 */
 	protected SqlNode parseQuery() {
 		try { 
@@ -53,38 +54,39 @@ public abstract class query {
 	}
 	
 	/**
-	 * crée un parseur pour la requette à parser
-	 * @param parser
+	 * crée un parser pour la requette à parser
+	 * @param query la requette.
 	 */
 	public void setParser(final String query) {
 		this.parser = SqlParser.create(query);
 	}
 	
 	/**
-	 * Retourne le parser de la requette à parser
-	 * @return
+	 * Retourne le parser de la requette à parser.
+	 * @return parser le parser sur la requette.
 	 */
 	public SqlParser getParser() {
 		return this.parser;
 	}
 	
 	/**
-	 * Set la requette à parser
+	 * Set la requette à parser.
+	 * @param query la requette.
 	 */
 	public void setQuery(final String query) {
 		this.queryToParse=query;
 	}
 	
 	/**
-	 * Retourner la requette à parser
-	 * @return la requette à parser
+	 * Retourner la requette à parser.
+	 * @return queryToParse la requette à parser.
 	 */
 	public String getQuery() {
 		return this.queryToParse;
 	}
 	
 	/**
-	 * Retourner la querry final à envoyer au module OS.
+	 * Retourner la querry final à envoyer au module OsTraitement.
 	 * @return queryResult une map qui à comme clé la clause et valeur la liste des ses attributs.
 	 */
 	public Map<String,List<String>> getQueryResult(){
@@ -93,7 +95,7 @@ public abstract class query {
 		
 	
 	/**
-	 * Remplir la hash map à envoyer au module OS.
+	 * Remplir la hash map à envoyer au module OsTraitement.
 	 * @param Clause la clause qui est la valeur de la clé.
 	 * @param attribut la Liste des atrributs à ajouter. 
 	 */

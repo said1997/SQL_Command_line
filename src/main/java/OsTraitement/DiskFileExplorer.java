@@ -29,13 +29,16 @@ public class DiskFileExplorer {
 	}
 	/**
 	 * Permet d'avoir la liste des dossier et fichiers contenu dans un dossier.
-	 * @return Liste de fichiers et dossiers
+	 * @return list Liste de fichiers et dossiers
 	 */
 	public List<String> list() {
 		this.listDirectory(this.initialpath);
 		return this.list;
 	}
-
+	/**
+	 * Remlie l'attribut liste de cette classe avec le nom des fichier contenu dans le dossier dir.
+	 * @param dir chamin du dossier à lister.
+	 */
 	private void listDirectory(String dir) {
 		File file = new File(dir);
 		File[] files = file.listFiles();
