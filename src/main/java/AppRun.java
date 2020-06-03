@@ -23,7 +23,7 @@ public enum AppRun{
 
 	public void run() {
 		sc = new Scanner(System.in);
-		System.out.println("Veuillez saisir votre requete ");
+		System.out.println("Veuillez saisir votre requête ");
 		System.out.print(">");
 		String query = sc.nextLine();
 		while (query.isEmpty() && !query.equals("exit")) {

@@ -11,18 +11,18 @@ public abstract class query {
 	
 	
 	/**
-	 * La requette à parser.
+	 * La requete à parser.
 	 */
 	private String queryToParse;
 	
 	/**
-	 * Le parser Sql qui sera utilisé pour parser la requette.
+	 * Le parser Sql qui sera utilisé pour parser la requete.
 	 */
 	private SqlParser  parser;
 	
 	
 	/**
-	 * Le résultat qui sera traité par OsTraitement après avoir parsé la requette.
+	 * Le résultat qui sera traité par OsTraitement après avoir parsé la requete.
 	 * Il sous forme d'une map qui a pour clé la clause et la liste de ses attributs.
 	 */
 	protected Map<String,List<String>> queryResult;
@@ -30,7 +30,7 @@ public abstract class query {
 	
 	/**
 	 * Constructeur de cette classe
-	 * @param query la requette à parser.
+	 * @param query la requete à parser.
 	 */
 	public query(final String query) {
 		
@@ -40,46 +40,46 @@ public abstract class query {
 	}
 	
 	/**
-	 * Parser la requette query.
-	 * @return SqlNode un SqlNode le premier noeud de la requette.
+	 * Parser la requete query.
+	 * @return SqlNode un SqlNode le premier noeud de la requete.
 	 */
 	protected SqlNode parseQuery() {
 		try { 
 			return getParser().parseQuery();
 		}
 		catch (Exception e) {
-			System.err.println("Erreur dans la syntaxe de la requette");
+			System.err.println("Erreur dans la syntaxe de la requete");
 			return null;
 		}
 	}
 	
 	/**
-	 * crée un parser pour la requette à parser
-	 * @param query la requette.
+	 * crée un parser pour la requete à parser
+	 * @param query la requete.
 	 */
 	public void setParser(final String query) {
 		this.parser = SqlParser.create(query);
 	}
 	
 	/**
-	 * Retourne le parser de la requette à parser.
-	 * @return parser le parser sur la requette.
+	 * Retourne le parser de la requete à parser.
+	 * @return parser le parser sur la requete.
 	 */
 	public SqlParser getParser() {
 		return this.parser;
 	}
 	
 	/**
-	 * Set la requette à parser.
-	 * @param query la requette.
+	 * Set la requete à parser.
+	 * @param query la requete.
 	 */
 	public void setQuery(final String query) {
 		this.queryToParse=query;
 	}
 	
 	/**
-	 * Retourner la requette à parser.
-	 * @return queryToParse la requette à parser.
+	 * Retourner la requete à parser.
+	 * @return queryToParse la requete à parser.
 	 */
 	public String getQuery() {
 		return this.queryToParse;
@@ -106,7 +106,7 @@ public abstract class query {
 	
 	/**
 	 * Regarde si une chaine de caractères contient au moin une minuscule ou une majuscule.
-	 * Si un utilisateur entre un chemin en minuscule il sera remis en minuscules après le traitement de la requette.
+	 * Si un utilisateur entre un chemin en minuscule il sera remis en minuscules après le traitement de la requete.
 	 * Si un utilisateur entre des caractères spéciaux ou des majuscules il doit mettre des " " pour l'attribut. 
 	 * @param str une chaine de caractères.
 	 * @return boolean true or false.

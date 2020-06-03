@@ -28,7 +28,7 @@ public abstract class OsTraitement {
 
 	/**
 	 * Constructeur de La classe OsTraitement
-	 * @param toTraduct un mape qui contien comme clé la clause de la requette et la liste de ses attributs qui seront 
+	 * @param toTraduct un mape qui contien comme clé la clause de la requete et la liste de ses attributs qui seront 
 	 * traduits en méthode getAttribute à executer.
 	 */
 	public OsTraitement(Map<String,List<String>> toTraduct) {

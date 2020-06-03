@@ -14,7 +14,7 @@ import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.parser.SqlParseException;
 
 /**
- * Classe qui s'occupe de parser une requette de type select.
+ * Classe qui s'occupe de parser une requete de type select.
  * @author UVSQTer
  *
  */
@@ -22,14 +22,14 @@ import org.apache.calcite.sql.parser.SqlParseException;
 public class querySelect extends query {
 
 	/**
-	 * Le noeud Select retourné après avoir parsé un requette de type Select
+	 * Le noeud Select retourné après avoir parsé un requete de type Select
 	 */
 	private SqlSelect SelectNode;
 
 	/**
 	 * Le constructeur de la classe querySelect.
 	 * Exctraire le attributs de la clause Select et les mettre dans queryResult
-	 * @param query la requette à traiter.
+	 * @param query la requete à traiter.
 	 */
 	public querySelect(final String query) {
 		super(query);
@@ -39,12 +39,12 @@ public class querySelect extends query {
 
 	/**
 	 * Retourner un SqlSelect au debut même si la le node retourner est de type Order by.
-	 * @return query Le premier noeud de la requette qui est un SqlSelect.
+	 * @return query Le premier noeud de la requete qui est un SqlSelect.
 	 */
 	private SqlSelect ParseSelectQuery() {
 
 		if (super.getQuery() == null || super.getQuery().length() == 0) {
-			System.err.println("Veuillez entrer une requette non vide");
+			System.err.println("Veuillez entrer une requete non vide");
 			return null;
 		}
 
@@ -58,7 +58,7 @@ public class querySelect extends query {
 			query = (SqlSelect) ((SqlOrderBy) all).query;
 			return query;
 		} else {
-			throw new UnsupportedOperationException("Le noeud de la requette est de type " + all.getClass() + " qui n'est pas supporté ici.");
+			throw new UnsupportedOperationException("Le noeud de la requete est de type " + all.getClass() + " qui n'est pas supporté ici.");
 		}
 	}
 	/**
@@ -335,7 +335,7 @@ public class querySelect extends query {
 			if (from.getLeft().getKind().equals(SqlKind.AS)) {
 				list.add(((SqlBasicCall) from.getLeft()).operand(1).toString());
 			} else {
-				// Si on a plus de 2 alias dans la requette query.
+				// Si on a plus de 2 alias dans la requete query.
 				if (from.getLeft() instanceof SqlJoin) {
 					SqlJoin left = (SqlJoin) from.getLeft();
 

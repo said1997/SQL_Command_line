@@ -14,7 +14,7 @@ import OsTraitement.FindCommand;
 import QueryTraitement.querySelect;
 import StructureInMemory.TablesInMemory;
 /**
- * Classe pour le traitement d'une requette du début à l'affichage.
+ * Classe pour le traitement d'une requete du début à l'affichage.
  * @author root
  *
  */
@@ -31,7 +31,7 @@ public class SelectCommand implements InterfaceCommand {
 		this.query=query;
 	}
 	/**
-	 * Traitement de la requette.
+	 * Traitement de la requete.
 	 */
 	@Override
 	public void execute() {
@@ -54,7 +54,7 @@ public class SelectCommand implements InterfaceCommand {
 	}
 
 	/**
-	 * Executer le requette de l'utilisateur sans l'aide de la structure mémoire
+	 * Executer le requete de l'utilisateur sans l'aide de la structure mémoire
 	 * @param result Map qui contient le resultat du la requete après le traitement.
 	 * @param path le chemin extrait de la clause from.
 	 */
@@ -91,7 +91,7 @@ public class SelectCommand implements InterfaceCommand {
 	}
 
 	/**
-	 * Executer le requette de l'utilisateur avec l'aide de la structure mémoire pour la filtration.
+	 * Executer le requete de l'utilisateur avec l'aide de la structure mémoire pour la filtration.
 	 * @param result Map qui contient le resultat du la requete après le traitement.
 	 * @param tableName le chemin extrait de la clause from.
 	 * @throws SQLException 

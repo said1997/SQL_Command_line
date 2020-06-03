@@ -1,7 +1,7 @@
 package CommandInterface;
 
 /**
- * Classe qui permets de trater les requettes update à implémenter.
+ * Classe qui permets de trater les requetes update à implémenter.
  * @author UVSQTer.
  *
  */
