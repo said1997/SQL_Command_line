@@ -16,7 +16,7 @@ public enum attributsOfFile {
 	DATELACCES("LASTACCESSTIME"),
 	DATELMODIFICATION("LASTMODIFIEDTIME"),
 	ACCESRIGHTS("PERMISSIONS"),
-	GUIDEUTILISATION("Bienvenue dans l'interface de recherche de fichiers ou dossiers sur votre disque par des requêtes SQL.\n"
+	GUIDEUTILISATION("\nBienvenue dans l'interface de recherche de fichiers ou dossiers sur votre disque par des requêtes SQL.\n"
 			+ "-Pour afficher l'historique de vos requêtes tapez show.\n"
 			+ "-Pour chercher sur votre disque dur tapez une requête Sql avec une syntaxe valide.\n"
 			+ "-Pour des chemins contenant  des caractères spéciaux ou majuscules veuillez les mettre entre \" \".\n"
