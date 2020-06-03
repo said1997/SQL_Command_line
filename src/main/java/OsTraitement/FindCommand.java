@@ -57,6 +57,9 @@ public class FindCommand extends OsTraitement {
 					if(l.equals(attributsOfFile.DATELMODIFICATION.get())) {
 						setFlagsAttributs(flagAttribut, attributsOfFile.DATELMODIFICATION.get());
 					}
+					if(l.equals(attributsOfFile.NAME.get())) {
+						setFlagsAttributs(flagAttribut, attributsOfFile.NAME.get());
+					}
 					if(l.equals(attributsOfFile.ACCESRIGHTS.get())) {
 						setFlagsAttributs(flagAttribut, attributsOfFile.ACCESRIGHTS.get());
 					}
@@ -122,6 +125,7 @@ public class FindCommand extends OsTraitement {
 		toInitFlags.put(attributsOfFile.DATE.get(), isInClauseSelect);
 		toInitFlags.put(attributsOfFile.TYPE.get(), isInClauseSelect);
 		toInitFlags.put(attributsOfFile.PATH.get(), isInClauseSelect);
+		toInitFlags.put(attributsOfFile.NAME.get(), isInClauseSelect);
 		toInitFlags.put(attributsOfFile.DATE.get(), isInClauseSelect);
 		toInitFlags.put(attributsOfFile.SIZE.get(), isInClauseSelect);
 		toInitFlags.put(attributsOfFile.DATELMODIFICATION.get(), isInClauseSelect);

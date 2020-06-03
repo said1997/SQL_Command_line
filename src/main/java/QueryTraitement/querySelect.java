@@ -70,6 +70,7 @@ public class querySelect extends query {
 			for (int i=0;i<ListNode.size();i++)
 			{ 
 				if (ListNode.get(i).toString().equals(attributsOfFile.PATH.get()) || 
+						ListNode.get(i).toString().equals(attributsOfFile.NAME.get()) ||
 						ListNode.get(i).toString().equals(attributsOfFile.TYPE.get()) || 
 						ListNode.get(i).toString().equals(attributsOfFile.SIZE.get()) ||
 						ListNode.get(i).toString().equals(attributsOfFile.DATELACCES.get()) ||
@@ -80,7 +81,7 @@ public class querySelect extends query {
 
 				else if (ListNode.get(i).toString().equals("*"))
 				{
-					SelectAttributs.add(attributsOfFile.PATH.get());
+					SelectAttributs.add(attributsOfFile.NAME.get());
 					SelectAttributs.add(attributsOfFile.TYPE.get());
 					SelectAttributs.add(attributsOfFile.SIZE.get());
 					SelectAttributs.add(attributsOfFile.ACCESRIGHTS.get());

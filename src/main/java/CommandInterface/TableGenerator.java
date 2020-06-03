@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class TableGenerator {
 
-	private int PADDING_SIZE = 2;
+	private int PADDING_SIZE = 0;
 	private String NEW_LINE = "\n";
 	private String TABLE_JOINT_SYMBOL = "+";
 	private String TABLE_V_SPLIT_SYMBOL = "|";

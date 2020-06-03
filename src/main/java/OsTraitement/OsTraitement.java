@@ -65,6 +65,12 @@ public abstract class OsTraitement {
 				attribs.put(attributsOfFile.DATELMODIFICATION.get(),reOraniseDate(attribs.get("lastModifiedTime")));
 			}
 			
+			if(isInSelect(attributsOfFile.NAME.get())) {
+				Path p = Paths.get(command[2]);
+				Path fileName = p.getFileName();
+				attribs.put(attributsOfFile.NAME.get(),fileName.toString());
+			}
+			
 			if(isInSelect(attributsOfFile.SIZE.get())) {
 				attribs.put(attributsOfFile.SIZE.get(),attribs.get("size"));
 			}
@@ -104,7 +110,7 @@ public abstract class OsTraitement {
 	public String [] constructStatCommandSelect() {
 	
 		String [] initStatCommand = new String [3];
-		initStatCommand[0]=convertSelectAttributes();;
+		initStatCommand[0]=convertSelectAttributes();
 		initStatCommand[1]=convertSelectAttributes();
 		initStatCommand[2]="";
 		return initStatCommand;

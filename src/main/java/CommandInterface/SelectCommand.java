@@ -73,7 +73,8 @@ public class SelectCommand implements InterfaceCommand {
 				rowsList.add(row);
 			}
 		}
-		System.out.println(tableGenerator.generateTable(headersList, rowsList)); 
+		System.out.print("\n"+tableName+"/");
+		System.out.print(tableGenerator.generateTable(headersList, rowsList)); 
 	}
 
 	/**
@@ -116,6 +117,7 @@ public class SelectCommand implements InterfaceCommand {
 				table.AddLineToTable(table.Connect(), tableName, line, result.get("SELECT"));
 			}
 		}
+		System.out.print("\n"+tableName+"/");
 	}
 	/**
 	 * Affichage du résultat de la filtration à l'aide de la structure mémoire
@@ -132,7 +134,7 @@ public class SelectCommand implements InterfaceCommand {
 			Statement statement = table.Connect().createStatement();
 			ResultSet res;
 			String chargingFromTable = this.Command.replace("\"", ""); 
-			System.out.println("Le résultat de la filtration à l'aide de la structure mémoire :");
+			System.out.println("(Le résultat de la filtration à l'aide de la structure mémoire) :");
 			res = statement.executeQuery(chargingFromTable.replace("/", ""));
 			while (res.next()) {
 				List<String> row = new ArrayList<>();
@@ -145,7 +147,6 @@ public class SelectCommand implements InterfaceCommand {
 		} catch (SQLDataException e) {
 			System.out.println("Veuillez respecter le format de la date suivant : 'yyyy-mm-dd hh:mm:ss' ");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

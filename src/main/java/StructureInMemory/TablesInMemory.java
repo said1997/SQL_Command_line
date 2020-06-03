@@ -117,6 +117,7 @@ public class TablesInMemory {
 		Map<String, String > map = new HashMap<String, String>();
 		map.put(attributsOfFile.PATH.get(), attributsOfFile.PATH.get()+" varchar(80),");
 		map.put(attributsOfFile.TYPE.get(), attributsOfFile.TYPE.get()+" varchar(80),");
+		map.put(attributsOfFile.NAME.get(), attributsOfFile.NAME.get()+" varchar(80),");
 		map.put(attributsOfFile.SIZE.get(), attributsOfFile.SIZE.get()+" int,");
 		map.put(attributsOfFile.ACCESRIGHTS.get(), attributsOfFile.ACCESRIGHTS.get()+" varchar(80),");
 		map.put(attributsOfFile.DATE.get(), attributsOfFile.DATE.get()+" timestamp,");
@@ -149,6 +150,7 @@ public class TablesInMemory {
 		String ValuePrep="";
 		Map<String, String > map = new HashMap<String, String>();
 		map.put(attributsOfFile.PATH.get(), attributsOfFile.PATH.get()+",");
+		map.put(attributsOfFile.NAME.get(), attributsOfFile.NAME.get()+",");
 		map.put(attributsOfFile.TYPE.get(), attributsOfFile.TYPE.get()+",");
 		map.put(attributsOfFile.SIZE.get(), attributsOfFile.SIZE.get()+",");
 		map.put(attributsOfFile.ACCESRIGHTS.get(), attributsOfFile.ACCESRIGHTS.get()+",");
