@@ -8,11 +8,17 @@ import CommandInterface.SelectCommand;
 import CommandInterface.ShowCommand;
 import QueryTraitement.attributsOfFile;
 
-
+/**
+ * Classe principale du programme.
+ * @author UVSQTer
+ *
+ */
 
 public enum AppRun{
 	AppRun;
+	
 	private Scanner sc;
+	
 	private Stack<String> HistoriqueCommand = new Stack<String>();
 
 	public void run() {
@@ -36,7 +42,7 @@ public enum AppRun{
 					comand.execute();
 				} catch (Exception e) {
 					run();
-					} 
+				} 
 			}
 			run();
 		}
